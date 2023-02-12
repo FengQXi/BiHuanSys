@@ -28,7 +28,11 @@ if (process.env.NODE_ENV === 'production') {
   mockXHR()
 }
 
+<<<<<<< HEAD
 // 如果想要英文版 element-ui，按如下方式声明
+=======
+// set ElementUI lang to EN
+>>>>>>> 0631c00dc89975cdfaedd87ed0268b946e6b9aef
 // Vue.use(ElementUI, { locale })
 // 如果想要中文版 element-ui，按如下方式声明
 Vue.use(ElementUI)
