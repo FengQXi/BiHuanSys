@@ -48,7 +48,7 @@
                     name: 91,
                     level: "级别2",
                     category: "iele",
-                    sector: "项目部",
+                    sector: "重庆总站下属部门",
                     dutyPerson: "秦超",
                     timeout: 0,
                     status: 1
@@ -75,7 +75,7 @@
                     name: 99,
                     level: "级别2",
                     category: "tfu",
-                    sector: "党群科",
+                    sector: "川南总站下属",
                     dutyPerson: "姜秀兰",
                     timeout: 1,
                     status: 1
@@ -84,7 +84,7 @@
                     name: 114,
                     level: "级别2",
                     category: "gkg",
-                    sector: "项目部",
+                    sector: "川南总站部门",
                     dutyPerson: "苏杰",
                     timeout: 0,
                     status: 0
@@ -321,13 +321,24 @@
                 }
                 console.log(this.tableData)
             },
-            sectorClick(newdata){
-                this.tableData = this.tableData.filter((data) => {
-                    return data.sector === newdata.label
-                })
+            sectorClick(label,children){
+                //需要请求数据，更新tableData
+                if(children){
+                    this.tableData = this.tableData.filter((data) => {
+                        let flag = 0
+                        for(let i = 0;i < children.length;i++){
+                            if(data.sector === label || data.sector === children[i].label) flag = 1
+                        }
+                        return flag
+                    })
+                } else {
+                    this.tableData = this.tableData.filter((data) => {
+                        return data.sector === label
+                    })
+                }
             },
             updateTableData(){
-                //return 请求数据
+                //请求数据,更新tableData
             }
         }
     }

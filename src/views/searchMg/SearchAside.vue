@@ -1,7 +1,7 @@
 <template>
     <ul>
         <el-tree
-            :data="data"
+            :data="sectorData"
             :props="defaultProps"
             accordion
             @node-click="handleNodeClick">
@@ -15,7 +15,7 @@
         props:['sectorClick'],
         data() {
             return {
-                data: [
+                sectorData: [
                 {
                     id: 100,
                     label: '项目部',
@@ -31,30 +31,30 @@
                     label: '川南总站',
                     children: [{
                         id: 102102,
-                        label: '川南总站下属部门'
+                        label: '川南总站下属'
                     }, {
                         id: 6,
-                        label: '川南总站下属部门'
+                        label: '川南总站部门'
                     }]
                 }, {
                     id: 103,
                     label: '川西总站',
                     children: [{
                         id: 7,
-                        label: '川西总站下属部门'
+                        label: '川西总站下属'
                     }, {
                         id: 8,
-                        label: '川西总站下属部门'
+                        label: '川西总站部门'
                     }]
                 },{
                     id: 104,
                     label: '成都总站',
                     children: [{
                         id: 7,
-                        label: '成都总站下属部门'
+                        label: '成都总站下属'
                     }, {
                         id: 8,
-                        label: '成都总站下属部门'
+                        label: '成都总站部门'
                     }]
                 },{
                     id: 105,
@@ -116,7 +116,7 @@
         },
         methods: {
             handleNodeClick(data) {
-                this.sectorClick(data)
+                this.sectorClick(data.label,data.children)
             }
         },
     }
