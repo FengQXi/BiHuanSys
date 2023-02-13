@@ -346,21 +346,21 @@
 
 <style scoped>
     .el-header{
-        background-color: #f9fafc;
+        background-color: #fff;
         color: #333;
         /* text-align: center;
         line-height: 60px; */
     }
     
     .el-aside {
-        background-color: #E9EEF3;
+        background-color: #fff;
         color: #333;
         /* text-align: center;
         line-height: 200px; */
     }
     
     .el-main {
-        background-color: #E9EEF3;
+        background-color: #fff;
         color: #333;
         /* text-align: center;
         line-height: 160px; */
