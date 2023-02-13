@@ -69,13 +69,13 @@
         border-radius: 4px;
     }
     .bg-purple-dark {
-        background: #99a9bf;
+        background: #fff;
     }
     .bg-purple {
-        background: #f9fafc;
+        background: #fff;
     }
     .bg-purple-light {
-        background: #e5e9f2;
+        background: #fff;
     }
     .grid-content {
         border-radius: 4px;

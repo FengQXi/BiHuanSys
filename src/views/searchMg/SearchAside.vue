@@ -126,19 +126,19 @@
     ul{
         /* width: 100%;
         height: 100%; */
-        background-color: #E9EEF3;  
+        background-color: #fff;  
         list-style: none;  
         margin: 0px; 
         padding: 20px;
     }
 
     li{
-        background-color: #E9EEF3;
+        background-color: #fff;
         padding-top: 6px;
     }
 
     li:hover{
-        background-color: #f7fafd;
+        background-color: #fff;
         border-radius: 6px
     }
 </style>

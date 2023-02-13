@@ -57,10 +57,10 @@
                         tooltip-effect="dark"
                         style="width: 100%"
                         @selection-change="handleSelectionChange">
-                        <el-table-column
+                        <!-- <el-table-column
                             type="selection"
                             width="55">
-                        </el-table-column>
+                        </el-table-column> -->
                         <el-table-column
                             prop="id"
                             label="用户名称"
@@ -673,7 +673,7 @@
     }
     
     .el-main {
-        background-color: #E9EEF3;
+        background-color: #fff;
         color: #333;
         padding-top: 0px;
         /* text-align: center;
