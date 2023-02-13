@@ -5,7 +5,7 @@
 
 
         <el-table :data="depart" style="width: 100%;margin-bottom: 20px;" row-key="id" border default-expand-all
-            :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
+            :tree-props="{ children: 'children' }">
 
             <el-table-column prop="date" label="创建日期" sortable width="280">
             </el-table-column>
