@@ -131,7 +131,7 @@ export default {
         updateRole(row) {
             this.dialogFormVisible = true
             // 这里数据结构复杂 要深拷贝
-            // this.attrInfo = cloneDeep(row)
+            // this.roleInfo = cloneDeep(row)
             this.roleInfo = JSON.parse(JSON.stringify(row))
             // this.roleInfo.authorityList.forEach(item => {
             //     this.$set(item, 'flag', false)
@@ -147,6 +147,7 @@ export default {
                 }
                 this.roleInfo.authorityList.push(newAuthority) // 可以数据代理
             });
+            // 发请求
             this.selectedAuthority = [] // 置空 刷新select框
         },
         cancelAdd() {

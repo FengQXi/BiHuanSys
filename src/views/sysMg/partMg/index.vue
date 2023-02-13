@@ -1,12 +1,38 @@
 <template>
     <div class="app-container">
-        <el-button type="primary" icon="el-icon-plus" style="margin-bottom: 20px;" @click="dialogFormVisible = true">添加部门</el-button>
+        <el-button type="primary" icon="el-icon-plus" style="margin-bottom: 20px;"
+            @click="dialogFormVisible = true">添加部门</el-button>
 
-        <el-tree :data="data" node-key="id" default-expand-all :expand-on-click-node="false">
+
+        <el-table :data="depart" style="width: 100%;margin-bottom: 20px;" row-key="id" border default-expand-all
+            :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
+
+            <el-table-column prop="date" label="创建日期" sortable width="280">
+            </el-table-column>
+
+            <el-table-column label="部门名称" width="280">
+                <template slot-scope="{row, $index}">
+                    <el-tag v-if="row.children" size="medium" type="success">{{ row.label }}</el-tag>
+                    <el-tag v-else size="medium" type="success" style="float: right">{{ row.label }}</el-tag>
+                </template>
+            </el-table-column>
+
+            <el-table-column label="操作" align="right">
+                <template slot-scope="{row, $index}">
+                    <el-button v-if="row.children" size="mini" type="primary" @click="dialogFormVisible = true">添加下级部门</el-button>
+
+                    <el-button size="mini" type="danger">删除</el-button>
+                </template>
+            </el-table-column>
+
+        </el-table>
+
+
+        <!-- <el-tree :data="data" node-key="id" default-expand-all :expand-on-click-node="false">
             <div class="custom-tree-node" slot-scope="{ node, data }" style="font-size: 18px;">
                 <span>{{ node.label }}</span>
                 <div>
-                    <el-button v-if="node.level == '1'" type="success" size="mini" @click="dialogFormVisible = true">
+                    <el-button v-if="node.level == '1'" type="primary" size="mini" @click="dialogFormVisible = true">
                         添加下级部门
                     </el-button>
                     <el-button type="danger" size="mini" @click="() => remove(node, data)">
@@ -14,7 +40,7 @@
                     </el-button>
                 </div>
             </div>
-        </el-tree>
+        </el-tree> -->
 
         <el-dialog title="添加部门" :visible.sync="dialogFormVisible">
             <el-form :model="formData">
@@ -72,13 +98,75 @@ export default {
                 level: '2',
             }]
         }];
+        const depart = [
+            {
+                id: 100,
+                date: '2013-02-07',
+                label: '项目部',
+                children: []
+            }, {
+                id: 101,
+                date: '2000-04-07',
+                label: '重庆总站',
+                children: [{
+                    id: 101101,
+                    date: '2013-02-07',
+                    label: '重庆总站下属部门',
+                }]
+            }, {
+                id: 102,
+                date: '2003-11-09',
+                label: '川南总站',
+                children: [{
+                    id: 102102,
+                    date: '2013-02-07',
+                    label: '川南总站下属部门'
+                }, {
+                    id: 6,
+                    date: '2013-02-07',
+                    label: '川南总站下属部门'
+                }]
+            }, {
+                id: 104,
+                date: '2019-12-07',
+                label: '成都总站',
+                children: [{
+                    id: 7,
+                    date: '2013-02-07',
+                    label: '成都总站下属部门'
+                }, {
+                    id: 8,
+                    date: '2013-02-07',
+                    label: '成都总站下属部门'
+                }]
+            }, {
+                id: 105,
+                date: '2013-02-07',
+                label: '办公室',
+                children: []
+            }, {
+                id: 106,
+                date: '2013-02-07',
+                label: '财务共享中心',
+                children: []
+            }, {
+                id: 107,
+                date: '2013-02-07',
+                label: '物联网业务部',
+                children: []
+            }, {
+                id: 108,
+                date: '2013-02-07',
+                label: '党群科',
+                children: []
+            }]
         return {
             dialogFormVisible: false,
             data: JSON.parse(JSON.stringify(data)),
+            depart: JSON.parse(JSON.stringify(depart)),
             formData: {
                 newDepartName: ''
             },
-            formLabelWidth: '120px'
         }
     },
     methods: {
