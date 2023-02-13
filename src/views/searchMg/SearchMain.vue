@@ -46,7 +46,7 @@
                 label="超时"
                 width="150"
                 align="center">
-                <template scope="scope">
+                <template slot-scope="scope">
                     <span v-if="scope.row.timeout=== 1" class="spanIsOk">否</span>
                     <span v-else-if="scope.row.timeout=== 0" class="spanIsNo">是</span>
                 </template>
@@ -56,7 +56,7 @@
                 label="状态"
                 width="150"
                 align="center">
-                <template scope="scope">
+                <template slot-scope="scope">
                     <span v-if="scope.row.status=== 1" class="spanIsOk">处理完成</span>
                     <span v-else-if="scope.row.status=== 0" class="spanIsNo">正在处理中</span>
                 </template>
@@ -125,6 +125,7 @@
                 deep:true,
                 handler(){
                     this.tableDataShow = this.tableData
+                    this.tableForm.totalCount = this.tableDataShow.length
                 }
             }
         }
