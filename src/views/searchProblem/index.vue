@@ -21,7 +21,7 @@
     import SearchHeader from './SearchHeader.vue';
     import SearchAside from './SearchAside.vue';
     export default {
-        name: 'SearchManagement',
+        name: 'SearchProblem',
         components:{SearchMain,SearchHeader,SearchAside},
         data() {
             return {
