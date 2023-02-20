@@ -1,6 +1,7 @@
 <template>
     <div class="app-container">
-        <el-button type="primary" icon="el-icon-plus" @click="dialogFormVisible = true">录入问题</el-button>
+        <el-button type="primary" icon="el-icon-plus" @click="dialogFormVisible = true">单个录入</el-button>
+        <el-button type="primary" icon="el-icon-plus" @click="dialogVisible = true">文件导入</el-button>
 
         <el-table :data="problemList" style="width: 100%">
             <el-table-column type="expand">
@@ -93,14 +94,65 @@
                 </el-form-item>
 
                 <el-form-item label="整改时限" label-width="120px" size="mini">
-                    <el-date-picker v-model="problemInfo.limitTime" type="date" placeholder="选择时限" value-format="yyyy-MM-dd" :picker-options="exceptTime">
+                    <el-date-picker v-model="problemInfo.limitTime" type="date" placeholder="选择时限" value-format="yyyy-MM-dd"
+                        :picker-options="exceptTime">
                     </el-date-picker>
                 </el-form-item>
             </el-form>
+
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogClose">取 消</el-button>
                 <el-button type="primary" @click="confirmUpdate">确 定</el-button>
             </div>
+        </el-dialog>
+
+        <el-dialog title="文件导入" :visible.sync="dialogVisible">
+            <el-upload class="upload-demo" drag multiple>
+                <i class="el-icon-upload"></i>
+                <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                <div class="el-upload__tip" slot="tip">只能上传excel文件，且不超过500kb</div>
+            </el-upload>
+
+            <!-- :data -->
+            <el-table style="width: 100%">
+                <el-table-column type="expand">
+                    <template slot-scope="{row, $index}">
+                        <el-form label-position="left" inline class="demo-table-expand">
+                            <el-form-item label="产生原因">
+                                <span>{{ row.cause }}</span>
+                            </el-form-item>
+                            <el-form-item label="检查级别">
+                                <span>{{ row.level }}</span>
+                            </el-form-item>
+                            <el-form-item label="问题程度">
+                                <span>{{ row.degree }}</span>
+                            </el-form-item>
+                            <el-form-item label="负责部门">
+                                <span>{{ row.department.label }}</span>
+                            </el-form-item>
+                            <el-form-item label="负责人">
+                                <span>{{ row.responsePerson.name }}</span>
+                            </el-form-item>
+                            <el-form-item label="整改限期">
+                                <span>{{ row.limitTime }}</span>
+                            </el-form-item>
+                        </el-form>
+                    </template>
+                </el-table-column>
+                <el-table-column label="录入时间" prop="entryTime">
+                </el-table-column>
+                <el-table-column label="问题名称" prop="name">
+                </el-table-column>
+                <el-table-column label="问题描述" prop="describe">
+                </el-table-column>
+                <el-table-column label="问题类别" prop="category">
+                </el-table-column>
+            </el-table>
+
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+            </span>
         </el-dialog>
     </div>
 </template>
@@ -111,6 +163,7 @@ export default {
     data() {
         return {
             dialogFormVisible: false,
+            dialogVisible: false,
             categoryList: [
                 {
                     id: '110',
@@ -317,12 +370,12 @@ export default {
             selectedDepart: '',
             selectedPerson: '',
             exceptTime: {
-				disabledDate(date) {
-			        //disabledDate 文档上：设置禁用状态，参数为当前日期，要求返回 Boolean
+                disabledDate(date) {
+                    //disabledDate 文档上：设置禁用状态，参数为当前日期，要求返回 Boolean
                     // 今天之前的都不能选择
-					return date.getTime() < Date.now() - 24 * 60 * 60 * 1000
-				}
-			},
+                    return date.getTime() < Date.now() - 24 * 60 * 60 * 1000
+                }
+            },
         }
     },
     methods: {
