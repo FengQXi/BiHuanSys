@@ -106,15 +106,23 @@
             </div>
         </el-dialog>
 
-        <el-dialog title="文件导入" :visible.sync="dialogVisible">
-            <el-upload class="upload-demo" drag multiple>
+        <el-dialog title="文件导入" :visible.sync="dialogVisible" @closed="closed()">
+            <el-upload 
+                class="upload-demo" 
+                drag 
+                multiple
+                action
+                accept=".xlsx,.xls"
+                :auto-upload="false"
+                :on-change="handle"
+                style="height: 205px; width: 360px; text-align: center;margin: auto;">
                 <i class="el-icon-upload"></i>
                 <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                <div class="el-upload__tip" slot="tip">只能上传excel文件，且不超过500kb</div>
+                <div class="el-upload__tip" slot="tip">只能上传excel文件,且不超过500kb</div>
             </el-upload>
 
             <!-- :data -->
-            <el-table style="width: 100%">
+            <el-table :data="fileData" style="width: 100%" max-height="250">
                 <el-table-column type="expand">
                     <template slot-scope="{row, $index}">
                         <el-form label-position="left" inline class="demo-table-expand">
@@ -158,7 +166,9 @@
 </template>
 
 <script>
-export default {
+import {readFile, character} from '@/utils/index'
+import * as XLSX from 'xlsx' 
+export default {  
     name: 'ProblemEntry',
     data() {
         return {
@@ -376,6 +386,8 @@ export default {
                     return date.getTime() < Date.now() - 24 * 60 * 60 * 1000
                 }
             },
+            //文件操作数据
+            fileData:[]
         }
     },
     methods: {
@@ -423,24 +435,54 @@ export default {
             // 发请求
 
             this.dialogClose()
+        },
+        //文件导入操作
+        async handle(ev){
+            if(ev.row) return 
+            
+            let data = await readFile(ev.raw);
+            let workBook = XLSX.read(data, { type: 'binary'})
+            let workSheet = workBook.Sheets[workBook.SheetNames[0]]
+            data = XLSX.utils.sheet_to_json(workSheet)
+
+            let arr=[]
+            data.forEach(item =>{
+                let obj = {}
+                for(let key in character){
+                    if(!character.hasOwnProperty(key)) break
+                    let v = character[key]
+                    let text = v.text
+                    let type = v.type
+                    v = item[text]||''
+                    type === 'string' ? (v = String(v)) : null
+                    obj[key] = v
+                }
+                arr.push(obj)
+            })
+            this.fileData = arr
+            console.log(arr)
+
+        },
+        closed(){
+            this.fileData = []
         }
     },
 }
 </script>
 
 <style scoped>
-.demo-table-expand {
-    font-size: 0;
-}
+    .demo-table-expand {
+        font-size: 0;
+    }
 
-.demo-table-expand label {
-    width: 90px;
-    color: #99a9bf;
-}
+    .demo-table-expand label {
+        width: 90px;
+        color: #99a9bf;
+    }
 
-.demo-table-expand .el-form-item {
-    margin-right: 0;
-    margin-bottom: 0;
-    width: 50%;
-}
+    .demo-table-expand .el-form-item {
+        margin-right: 0;
+        margin-bottom: 0;
+        width: 50%;
+    }
 </style>
