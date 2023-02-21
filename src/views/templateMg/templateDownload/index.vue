@@ -1,12 +1,12 @@
 <template>
     <div class="app-container">
-        图标管理组件
+        模板下载页面
     </div>
 </template>
 
 <script>
 export default {
-    name: 'ChartManagement',
+    name: 'TemplateDownload',
 }
 </script>
 
