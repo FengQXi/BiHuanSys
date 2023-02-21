@@ -357,8 +357,7 @@ export default {
                     name: '大佬'
                 },
                 limitTime: '2013-02-07'
-            },
-            ],
+            }],
             problemInfo: { // 收集新增和修改的问题的信息
                 entryTime: '',
                 name: '',
@@ -447,7 +446,7 @@ export default {
 
             let arr=[]
             data.forEach(item =>{
-                let obj = {}
+                let obj = this.problemInfo
                 for(let key in character){
                     if(!character.hasOwnProperty(key)) break
                     let v = character[key]
@@ -457,11 +456,12 @@ export default {
                     type === 'string' ? (v = String(v)) : null
                     obj[key] = v
                 }
+                obj.department = { id: obj.departmentId, label: obj.departmentLable }
+                obj.responsePerson = { id: obj.responsePersonId, name: obj.responsePersonName } 
                 arr.push(obj)
             })
             this.fileData = arr
             console.log(arr)
-
         },
         closed(){
             this.fileData = []
