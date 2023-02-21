@@ -89,8 +89,8 @@
                             width="135"
                             align="center">
                             <template slot-scope="scope">
-                                <span v-if="scope.row.status=== 1" class="spanIsOk">启用</span>
-                                <span v-else-if="scope.row.status=== 0" class="spanIsNo">停用</span>
+                                <span v-if="scope.row.status == 1" class="spanIsOk">启用</span>
+                                <span v-else-if="scope.row.status == 0" class="spanIsNo">停用</span>
                             </template>
                         </el-table-column>
                         <el-table-column
@@ -129,6 +129,7 @@
                         title="提示"
                         :visible.sync="centerDialogVisibleUpdate"
                         width="45%"
+                        @close="close()"
                         center>
                         <!-- 修改数据展示的form表格  -->
                         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
@@ -139,7 +140,15 @@
                                 <el-input v-model="ruleForm.name"></el-input>
                             </el-form-item>
                             <el-form-item label="归属部门" prop="sector">
-                                <el-input v-model="ruleForm.sector"></el-input>
+                                <!-- <el-input v-model="ruleForm.sector"></el-input> -->
+                                <el-select v-model="ruleForm.sector" placeholder="请选择部门">
+                                    <el-option
+                                        v-for="item in sectorData"
+                                        :key="item.id"
+                                        :label="item.label"
+                                        :value="item.id">
+                                    </el-option>
+                                </el-select>
                             </el-form-item>
                             <el-form-item label="手机电话" prop="phone">
                                 <el-input v-model="ruleForm.phone"></el-input>
@@ -173,6 +182,7 @@
                         title="提示"
                         :visible.sync="centerDialogVisibleAdd"
                         width="45%"
+                        @close="close()"
                         center>
                         <!-- 新增数据展示的form表格  -->
                         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
@@ -501,7 +511,7 @@
                     name: '',
                     sector: '',
                     phone:'',
-                    status: 0,
+                    status: false,
                     date: '',
                     role:'',
                 },
@@ -510,9 +520,9 @@
                         { required: true, message: '请输入用户昵称', trigger: 'blur' },
                         { min: 1, max: 5, message: '长度在 1 到 5 个字符', trigger: 'blur' }
                     ],
-                    sector: [
-                        { required: true, message: '请输入归属部门', trigger: 'blur' },
-                    ],
+                    // sector: [
+                    //     { required: true, message: '请输入归属部门', trigger: 'blur' },
+                    // ],
                     phone: [
                         { required: true, message: '请输入电话号码', trigger: 'blur' },
                         { min: 11, max: 11, message: '长度为 11 个字符', trigger: 'blur' }
@@ -587,12 +597,13 @@
                 this.multipleSelection = val;
             },
             updatePersonData(userId){
+                console.log(this.ruleForm.status+'###')
                 let person = []
                 person = this.personDataShow.filter((data) => {
                     return data.id === userId
                 })
                 this.ruleForm = person[0]
-                console.log(this.ruleForm.status+'@@@@'+person[0].status+'###')
+                console.log(this.ruleForm.status+'@@@@'+person[0].status)
             },
             submitForm(formName) {  
                 this.$refs[formName].validate((valid) => {
@@ -607,6 +618,17 @@
             },
             resetForm(formName) {
                 this.$refs[formName].resetFields();
+            },
+            close() {
+                this.ruleForm = {
+                    id:'',
+                    name: '',
+                    sector: '',
+                    phone:'',
+                    status: false,
+                    date: '',
+                    role:'',
+                }
             },
             deletePersonData(userId){
                 //删除当前选择的数据,传入参数userId，然后跟新personDataShow
@@ -642,9 +664,10 @@
             },
             searchByCondition(){
                 if (this.nameInput) {//搜索名称
-                    this.personDataShow = this.personDataShow.filter((data) => {
-                        return data.name === this.nameInput
-                    })
+                    // this.personDataShow = this.personDataShow.filter((item) => {
+                    //     return data.name === this.nameInput
+                    // })
+                    this.personDataShow = this.personDataShow.filter(item=>item.name.includes(this.nameInput))
                 }
                 if (this.phoneInput) {//搜索时间
                     this.personDataShow = this.personDataShow.filter((data) => {
@@ -652,6 +675,14 @@
                     })
                 }
                 this.tableForm.totalCount = this.personDataShow.length
+            }
+        },
+        watch:{
+            personDataShow:{
+                immediate:true,
+                deep:true,
+                handler(){
+                }
             }
         }
     }

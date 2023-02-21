@@ -1,12 +1,12 @@
 <template>
     <div class="app-container">
-        问题处理的组件
+        文件上传组件
     </div>
 </template>
 
 <script>
 export default {
-    name: 'ProblemSolve',
+    name: 'FileUpload',
 }
 </script>
 
