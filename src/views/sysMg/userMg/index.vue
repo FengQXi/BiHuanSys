@@ -56,11 +56,8 @@
                         :data="personDataShow"
                         tooltip-effect="dark"
                         style="width: 100%"
+                        max-height="490px"
                         @selection-change="handleSelectionChange">
-                        <!-- <el-table-column
-                            type="selection"
-                            width="55">
-                        </el-table-column> -->
                         <el-table-column
                             prop="id"
                             label="用户名称"
@@ -275,9 +272,9 @@
                         { required: true, message: '请输入电话号码', trigger: 'blur' },
                         { min: 11, max: 11, message: '长度为 11 个字符', trigger: 'blur' }
                     ],
-                    role: [
-                        { required: false, message: '请选择用户角色', trigger: 'change' }
-                    ],
+                    // role: [
+                    //     { required: false, message: '请选择用户角色', trigger: 'change' }
+                    // ],
                 },
                 //顶部搜索栏数据
                 nameInput:'',
@@ -292,9 +289,9 @@
         methods:{
             //侧边栏部门点击事件
             handleNodeClick(sector){
-                 //需要请求数据，更新personDataShow
-                 if(sector.children){
-                    this.personDataShow = this.personDataShow.filter((data) => {
+                this.personData = this.$store.state.allUser.allUserList
+                 if(sector.children && sector.children.length){
+                    this.personDataShow = this.personData.filter((data) => {
                         let flag = 0
                         for(let i = 0;i < sector.children.length;i++){
                             if(data.sector === sector.label || data.sector === sector.children[i].label) flag = 1
@@ -302,7 +299,7 @@
                         return flag
                     })
                 } else {
-                    this.personDataShow = this.personDataShow.filter((data) => {
+                    this.personDataShow = this.personData.filter((data) => {
                         return data.sector === sector.label
                     })
                 }
@@ -323,6 +320,7 @@
                         break
                     }
                 }
+                this.tableForm.totalCount = this.personData.length
             },
             handleSizeChange(val) {                 // 修改每页所存数据量的值所触发的函数
                 this.tableForm.pageSize = val;      // 修改页的大小
@@ -409,19 +407,22 @@
                 //请求数据，更新personDataShow
                 this.idInput = ''
                 this.phoneInput = ''
+                this.personData = this.$store.state.allUser.allUserList
+                this.getList()
             },
             searchByCondition(){
                 if (this.nameInput) {//搜索名称
                     // this.personDataShow = this.personDataShow.filter((item) => {
                     //     return data.name === this.nameInput
                     // })
-                    this.personDataShow = this.personDataShow.filter(item=>item.name.includes(this.nameInput))
+                    this.personData = this.personData.filter(item=>item.name.includes(this.nameInput))
                 }
                 if (this.phoneInput) {//搜索时间
-                    this.personDataShow = this.personDataShow.filter((data) => {
+                    this.personData = this.personData.filter((data) => {
                         return data.phone === this.phoneInput
                     })
                 }
+                this.personDataShow = this.personData
                 this.tableForm.totalCount = this.personDataShow.length
             }
         },

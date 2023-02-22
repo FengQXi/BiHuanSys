@@ -3,9 +3,9 @@
         <el-table
             :data="tableDataShow"
             style="width: 100% "
-            height="100%">
+            max-height="490px">
             <el-table-column
-                prop="date"
+                prop="entryTime"
                 label="问题录入时间"
                 align="center">
             </el-table-column>
@@ -26,24 +26,23 @@
                 align="center">
             </el-table-column>
             <el-table-column
-                prop="sector"
+                prop="department.label"
                 label="问题产生部门"
                 align="center">
             </el-table-column>
             <el-table-column
-                prop="dutyPerson"
+                prop="responsePerson.name"
                 label="整改责任人"
                 width="100"
                 align="center">
             </el-table-column>
             <el-table-column
-                prop="timeout"
                 label="超时"
                 width="100"
                 align="center">
                 <template slot-scope="scope">
-                    <span v-if="scope.row.timeout=== 1" class="spanIsOk">否</span>
-                    <span v-else-if="scope.row.timeout=== 0" class="spanIsNo">是</span>
+                    <span v-show="timeout(scope.row)" class="spanIsOk">是</span>
+                    <span v-show="!timeout(scope.row)" class="spanIsNo">否</span>
                 </template>
             </el-table-column>
             <el-table-column
@@ -52,8 +51,9 @@
                 width="100"
                 align="center">
                 <template slot-scope="scope">
-                    <span v-if="scope.row.status=== 1" class="spanIsOk">处理完成</span>
-                    <span v-else-if="scope.row.status=== 0" class="spanIsNo">正在处理中</span>
+                    <span v-if="scope.row.status == '1'" class="spanIsNo">处理中</span>
+                    <span v-else-if="scope.row.status == '2'" class="spanIsIng">待审核</span>
+                    <span v-else-if="scope.row.status == '3'" class="spanIsOk">已闭环</span>
                 </template>
             </el-table-column>
         </el-table>
@@ -112,15 +112,20 @@
             handleCurrentChange(val) {                  // 修改当前页所触发的函数
                 this.tableForm.pageNo = val;            // 更新当前的页
                 this.getList();                         // 按新的pageNo和pageSize进行查询
+            },
+            timeout(value){
+                var entryTime = Date.parse(new Date(value.entryTime));
+                var limitTime = Date.parse(new Date(value.limitTime));
+                return limitTime - entryTime > 0 ? true : false
             }
         },
         watch:{
             tableData:{
-                immediate:true,
+                immediate:false,
                 deep:true,
                 handler(){
-                    this.tableDataShow = this.tableData
-                    this.tableForm.totalCount = this.tableDataShow.length
+                    this.getList();
+                    this.tableForm.totalCount = this.tableData.length
                 }
             }
         }
@@ -129,6 +134,9 @@
 
 <style scoped>
     .spanIsOk{
+        color: #3bc93b;
+    }
+    .spanIsIng{
         color: #18A7FF;
     }
     .spanIsNo{
