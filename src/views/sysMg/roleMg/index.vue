@@ -73,39 +73,10 @@ export default {
         return {
             isShowTable: true,
             dialogFormVisible: false,
-            roleList: [{
-                id: 1,
-                roleName: '超级用户',
-                authorityList: [{
-                    authorityId: '11',
-                    authorityName: '用户管理',
-                },
-                {
-                    authorityId: '12',
-                    authorityName: '角色管理管理',
-                },
-                {
-                    authorityId: '13',
-                    authorityName: '部门管理',
-                }]
-            }],
-            allAuthorityList: [{
-                authorityId: '11',
-                authorityName: '用户管理',
-            },
-            {
-                authorityId: '12',
-                authorityName: '角色管理管理',
-            },
-            {
-                authorityId: '13',
-                authorityName: '部门管理',
-            },
-            {
-                authorityId: '14',
-                authorityName: '图表管理',
-            }
-            ],
+
+            roleList: this.$store.state.roleAndAuthority.roleList,
+            allAuthorityList: this.$store.state.roleAndAuthority.allAuthorityList,
+            
             roleInfo: {// 收集新增和修改的角色
                 roleName: '',
                 authorityList: [

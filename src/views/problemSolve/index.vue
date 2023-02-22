@@ -129,131 +129,14 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
     name: 'ProblemEntry',
     data() {
         return {
             activeName: 'first',
             dialogFormVisible: false,
-
-            pendingSolveList: [{
-                id: '2000001',
-                entryTime: '2013-02-07',
-                name: '单个问题',
-                describe: '单个问题的描述',
-                category: '安全',
-                cause: '制度贯彻，执行问题',
-                level: '一级',
-                degree: '一般',
-                department: {
-                    id: '101101',
-                    label: '重庆总站下属部门',
-                },
-                responsePerson: {
-                    id: '1000002',
-                    name: '大佬'
-                },
-                solveMethods: 'asdfasf',
-                limitTime: '2013-02-07'
-            },
-            {
-                id: '2000002',
-                entryTime: '2013-02-07',
-                name: '单个问题',
-                describe: '单个问题的描述',
-                category: '安全',
-                cause: '制度贯彻，执行问题',
-                level: '一级',
-                degree: '一般',
-                department: {
-                    id: '101101',
-                    label: '重庆总站下属部门',
-                },
-                responsePerson: {
-                    id: '1000002',
-                    name: '大佬'
-                },
-                solveMethods: '',
-                limitTime: '2013-02-07'
-            },
-            ],
-            pendingCheckList: [{
-                id: '2000001',
-                entryTime: '2013-02-07',
-                name: '单个问题',
-                describe: '单个问题的描述',
-                category: '安全',
-                cause: '制度贯彻，执行问题',
-                level: '一级',
-                degree: '一般',
-                department: {
-                    id: '101101',
-                    label: '重庆总站下属部门',
-                },
-                responsePerson: {
-                    id: '1000002',
-                    name: '大佬'
-                },
-                limitTime: '2013-02-07'
-            },
-            {
-                id: '2000001',
-                entryTime: '2013-02-07',
-                name: '单个问题',
-                describe: '单个问题的描述',
-                category: '安全',
-                cause: '制度贯彻，执行问题',
-                level: '一级',
-                degree: '一般',
-                department: {
-                    id: '101101',
-                    label: '重庆总站下属部门',
-                },
-                responsePerson: {
-                    id: '1000002',
-                    name: '大佬'
-                },
-                limitTime: '2013-02-07'
-            },
-            {
-                id: '2000001',
-                entryTime: '2013-02-07',
-                name: '单个问题',
-                describe: '单个问题的描述',
-                category: '安全',
-                cause: '制度贯彻，执行问题',
-                level: '一级',
-                degree: '一般',
-                department: {
-                    id: '101101',
-                    label: '重庆总站下属部门',
-                },
-                responsePerson: {
-                    id: '1000002',
-                    name: '大佬'
-                },
-                limitTime: '2013-02-07'
-            },
-            {
-                id: '2000001',
-                entryTime: '2013-02-07',
-                name: '单个问题',
-                describe: '单个问题的描述',
-                category: '安全',
-                cause: '制度贯彻，执行问题',
-                level: '一级',
-                degree: '一般',
-                department: {
-                    id: '101101',
-                    label: '重庆总站下属部门',
-                },
-                responsePerson: {
-                    id: '1000002',
-                    name: '大佬'
-                },
-                limitTime: '2013-02-07'
-            },
-            ],
 
             problem: {
                 id: '',
@@ -276,6 +159,9 @@ export default {
                 limitTime: ''
             }
         }
+    },
+    computed: {
+        ...mapState('problem', ['pendingSolveList', 'pendingCheckList'])
     },
     methods: {
         checkView(row) {

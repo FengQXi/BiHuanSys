@@ -96,22 +96,14 @@ export const constantRoutes = [
 
     {
         path: '/templateManage',
-        name: 'TemplateManage',
         component: Layout,
-        redirect: '/templateManage/templateConfig',
         meta: { title: '模板管理', icon: 'el-icon-menu' },
         children: [
             {
-                path: 'templateConfig',
-                name: 'TemplateConfig',
-                component: () => import('@/views/templateMg/templateConfig'),
-                meta: { title: '模板配置', icon: 'el-icon-suitcase' }
-            },
-            {
-                path: 'templateDownload',
-                name: 'TemplateDownload',
-                component: () => import('@/views/templateMg/templateDownload'),
-                meta: { title: '模板下载', icon: 'el-icon-download' }
+                path: 'index',
+                name: 'TemplateManage',
+                component: () => import('@/views/templateMg'),
+                meta: { title: '模板管理', icon: 'el-icon-menu' },
             }
         ]
     },

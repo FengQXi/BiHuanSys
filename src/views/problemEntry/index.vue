@@ -106,15 +106,16 @@
             </div>
         </el-dialog>
 
-        <el-dialog title="文件导入" :visible.sync="dialogVisible">
-            <el-upload class="upload-demo" drag multiple>
+        <el-dialog title="文件导入" :visible.sync="dialogVisible" @closed="closed()">
+            <el-upload class="upload-demo" drag multiple action accept=".xlsx,.xls" :auto-upload="false" :on-change="handle"
+                style="height: 205px; width: 360px; text-align: center;margin: auto;">
                 <i class="el-icon-upload"></i>
                 <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                <div class="el-upload__tip" slot="tip">只能上传excel文件，且不超过500kb</div>
+                <div class="el-upload__tip" slot="tip">只能上传excel文件,且不超过500kb</div>
             </el-upload>
 
             <!-- :data -->
-            <el-table style="width: 100%">
+            <el-table :data="fileData" style="width: 100%" max-height="250">
                 <el-table-column type="expand">
                     <template slot-scope="{row, $index}">
                         <el-form label-position="left" inline class="demo-table-expand">
@@ -158,96 +159,18 @@
 </template>
 
 <script>
+import { readFile, character } from '@/utils/index'
+import * as XLSX from 'xlsx'
+import { mapState } from 'vuex'
+
 export default {
     name: 'ProblemEntry',
     data() {
         return {
             dialogFormVisible: false,
             dialogVisible: false,
-            categoryList: [
-                {
-                    id: '110',
-                    name: '安全'
-                },
-                {
-                    id: '111',
-                    name: '生产',
-                },
-                {
-                    id: '112',
-                    name: '财务',
-                },
-                {
-                    id: '113',
-                    name: '巡查',
-                },
-                {
-                    id: '114',
-                    name: '审计',
-                },
-                {
-                    id: '115',
-                    name: '施工',
-                },
-                {
-                    id: '116',
-                    name: '其他',
-                }
-            ],
-            causeList: [
-                {
-                    id: '1010',
-                    name: '制度贯彻，执行问题'
-                },
-                {
-                    id: '1011',
-                    name: '思想认知问题'
-                },
-                {
-                    id: '1012',
-                    name: '管理存在漏洞'
-                },
-                {
-                    id: '1013',
-                    name: '能力欠缺问题'
-                },
-                {
-                    id: '1014',
-                    name: '履职问题'
-                },
-                {
-                    id: '1015',
-                    name: '业务流程问题'
-                },
-                {
-                    id: '1016',
-                    name: '其他'
-                }
-            ],
-            levelList: [
-                {
-                    id: '10010',
-                    name: '一级'
-                },
-                {
-                    id: '10011',
-                    name: '二级'
-                }
-            ],
-            degreeList: [
-                {
-                    id: '100001',
-                    name: '一般'
-                },
-                {
-                    id: '100002',
-                    name: '普通'
-                },
-                {
-                    id: '100003',
-                    name: '严重'
-                }
-            ],
+            
+            // 所有的部门需要等待计算 先写死的
             allDepartmentList: [
                 {
                     id: 100,
@@ -302,6 +225,7 @@ export default {
                     date: '2013-02-07',
                     label: '党群科',
                 }],
+            // 这里不是全部人的列表 是需要选择部门后 查询所得
             allPeopleList: [
                 {
                     id: '1000001',
@@ -329,26 +253,6 @@ export default {
                 }
             ],
 
-            problemList: [{
-                id: '2000001',
-                entryTime: '2013-02-07',
-                name: '单个问题',
-                describe: '单个问题的描述',
-                category: '安全',
-                cause: '制度贯彻，执行问题',
-                level: '一级',
-                degree: '一般',
-                department: {
-                    id: '101101',
-                    label: '重庆总站下属部门',
-                },
-                responsePerson: {
-                    id: '1000002',
-                    name: '大佬'
-                },
-                limitTime: '2013-02-07'
-            },
-            ],
             problemInfo: { // 收集新增和修改的问题的信息
                 entryTime: '',
                 name: '',
@@ -369,14 +273,20 @@ export default {
             },
             selectedDepart: '',
             selectedPerson: '',
+            // 设置日期在天之前的都不能选择
             exceptTime: {
                 disabledDate(date) {
                     //disabledDate 文档上：设置禁用状态，参数为当前日期，要求返回 Boolean
-                    // 今天之前的都不能选择
                     return date.getTime() < Date.now() - 24 * 60 * 60 * 1000
                 }
             },
+            //文件操作数据
+            fileData: []
         }
+    },
+    computed: {
+        ...mapState('template', ['categoryList', 'causeList', 'levelList', 'degreeList']),
+        ...mapState('problem', ['problemList'])
     },
     methods: {
         toUpdateProb(row) {
@@ -423,6 +333,37 @@ export default {
             // 发请求
 
             this.dialogClose()
+        },
+        //文件导入操作
+        async handle(ev) {
+            if (ev.row) return
+
+            let data = await readFile(ev.raw);
+            let workBook = XLSX.read(data, { type: 'binary' })
+            let workSheet = workBook.Sheets[workBook.SheetNames[0]]
+            data = XLSX.utils.sheet_to_json(workSheet)
+
+            let arr = []
+            data.forEach(item => {
+                let obj = this.problemInfo
+                for (let key in character) {
+                    if (!character.hasOwnProperty(key)) break
+                    let v = character[key]
+                    let text = v.text
+                    let type = v.type
+                    v = item[text] || ''
+                    type === 'string' ? (v = String(v)) : null
+                    obj[key] = v
+                }
+                obj.department = { id: obj.departmentId, label: obj.departmentLable }
+                obj.responsePerson = { id: obj.responsePersonId, name: obj.responsePersonName }
+                arr.push(obj)
+            })
+            this.fileData = arr
+            // console.log(arr)
+        },
+        closed() {
+            this.fileData = []
         }
     },
 }

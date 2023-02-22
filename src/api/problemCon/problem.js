@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-export const reqAllUserList = () => {
+export const reqXXX = () => {
     return request({
         url: '',
         method: '',
