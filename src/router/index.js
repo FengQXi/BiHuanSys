@@ -89,7 +89,7 @@ export const constantRoutes = [
                 path: 'index',
                 name: 'ProblemSolve',
                 component: () => import('@/views/problemSolve'),
-                meta: { title: '问题处理', icon: 'el-icon-pie-chart' }
+                meta: { title: '问题处理', icon: 'el-icon-edit' }
             }
         ],
     },
@@ -105,7 +105,7 @@ export const constantRoutes = [
                 path: 'templateConfig',
                 name: 'TemplateConfig',
                 component: () => import('@/views/templateMg/templateConfig'),
-                meta: { title: '模板配置', icon: 'el-icon-download' }
+                meta: { title: '模板配置', icon: 'el-icon-suitcase' }
             },
             {
                 path: 'templateDownload',
@@ -139,7 +139,7 @@ export const constantRoutes = [
                 path: 'partMg',
                 name: 'DepartmentManagement',
                 component: () => import('@/views/sysMg/partMg'),
-                meta: { title: '部门管理', icon: 'el-icon-s-promotion' }
+                meta: { title: '部门管理', icon: 'el-icon-office-building' }
             }
         ]
     },

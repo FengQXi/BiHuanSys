@@ -3,7 +3,7 @@
         <el-button type="primary" icon="el-icon-plus" @click="dialogFormVisible = true">单个录入</el-button>
         <el-button type="primary" icon="el-icon-plus" @click="dialogVisible = true">文件导入</el-button>
 
-        <el-table :data="problemList" style="width: 100%">
+        <el-table :data="problemList" style="width: 100%" size="medium">
             <el-table-column type="expand">
                 <template slot-scope="{row, $index}">
                     <el-form label-position="left" inline class="demo-table-expand">
@@ -434,7 +434,7 @@ export default {
 }
 
 .demo-table-expand label {
-    width: 90px;
+    width: 60px;
     color: #99a9bf;
 }
 
