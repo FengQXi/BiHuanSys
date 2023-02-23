@@ -59,24 +59,24 @@
                         max-height="490px"
                         @selection-change="handleSelectionChange">
                         <el-table-column
-                            prop="id"
-                            label="用户名称"
+                            prop="userId"
+                            label="用户Id"
                             width="135"
                             align="center">
                         </el-table-column>
                         <el-table-column
-                            prop="name"
+                            prop="nickName"
                             label="用户昵称"
                             width="135"
                             align="center">
                         </el-table-column>
                         <el-table-column
-                            prop="sector"
+                            prop="deptName"
                             label="部门"
                             align="center">
                         </el-table-column>
                         <el-table-column
-                            prop="phone"
+                            prop="phonenumber"
                             label="手机电话"
                             align="center">
                         </el-table-column>
@@ -91,7 +91,7 @@
                             </template>
                         </el-table-column>
                         <el-table-column
-                            prop="date"
+                            prop="createTime"
                             label="注册时间"
                             align="center">
                         </el-table-column>
@@ -103,9 +103,9 @@
                                 <el-button type="primary" icon="el-icon-edit" circle size="mini" 
                                     @click="
                                         centerDialogVisibleUpdate = true;
-                                        updatePersonData(scope.row.id);">
+                                        updatePersonData(scope.row.userId);">
                                 </el-button>
-                                <el-button type="danger" icon="el-icon-delete" circle size="mini" @click="deletePersonData(scope.row.id)"></el-button>
+                                <el-button type="danger" icon="el-icon-delete" circle size="mini" @click="deletePersonData(scope.row.userId)"></el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -130,15 +130,15 @@
                         center>
                         <!-- 修改数据展示的form表格  -->
                         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-                            <el-form-item label="用户名称" prop="id">
-                                <el-input v-model="ruleForm.id" :disabled="true"></el-input>
+                            <el-form-item label="用户名称" prop="userId">
+                                <el-input v-model="ruleForm.userId" :disabled="true"></el-input>
                             </el-form-item>
-                            <el-form-item label="用户昵称" prop="name">
-                                <el-input v-model="ruleForm.name"></el-input>
+                            <el-form-item label="用户昵称" prop="nickName">
+                                <el-input v-model="ruleForm.nickName"></el-input>
                             </el-form-item>
-                            <el-form-item label="归属部门" prop="sector">
+                            <el-form-item label="归属部门" prop="deptName">
                                 <!-- <el-input v-model="ruleForm.sector"></el-input> -->
-                                <el-select v-model="ruleForm.sector" placeholder="请选择部门">
+                                <el-select v-model="ruleForm.deptName" placeholder="请选择部门">
                                     <el-option
                                         v-for="item in departmentList"
                                         :key="item.id"
@@ -147,10 +147,10 @@
                                     </el-option>
                                 </el-select>
                             </el-form-item>
-                            <el-form-item label="手机电话" prop="phone">
-                                <el-input v-model="ruleForm.phone"></el-input>
+                            <el-form-item label="手机电话" prop="phonenumber">
+                                <el-input v-model="ruleForm.phonenumber"></el-input>
                             </el-form-item>
-                            <el-form-item label="用户角色" prop="role" show-message:false>
+                            <el-form-item label="用户角色" prop="roleName" show-message:false>
                                 <el-select v-model="ruleForm.region" placeholder="请选择用户角色">
                                     <el-option label="超级用户" value="role1"></el-option>
                                     <el-option label="普通用户" value="role2"></el-option>
@@ -183,19 +183,19 @@
                         center>
                         <!-- 新增数据展示的form表格  -->
                         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-                            <el-form-item label="用户名称" prop="id">
-                                <el-input v-model="ruleForm.id" ></el-input>
+                            <el-form-item label="用户名称" prop="userId">
+                                <el-input v-model="ruleForm.userId" ></el-input>
                             </el-form-item>
-                            <el-form-item label="用户昵称" prop="name">
-                                <el-input v-model="ruleForm.name"></el-input>
+                            <el-form-item label="用户昵称" prop="nickName">
+                                <el-input v-model="ruleForm.nickName"></el-input>
                             </el-form-item>
-                            <el-form-item label="归属部门" prop="sector">
-                                <el-input v-model="ruleForm.sector"></el-input>
+                            <el-form-item label="归属部门" prop="deptName">
+                                <el-input v-model="ruleForm.deptName"></el-input>
                             </el-form-item>
-                            <el-form-item label="手机电话" prop="phone">
-                                <el-input v-model="ruleForm.phone"></el-input>
+                            <el-form-item label="手机电话" prop="phonenumber">
+                                <el-input v-model="ruleForm.phonenumber"></el-input>
                             </el-form-item>
-                            <el-form-item label="用户角色" prop="role" show-message:false>
+                            <el-form-item label="用户角色" prop="roleName" show-message:false>
                                 <el-select v-model="ruleForm.region" placeholder="请选择用户角色">
                                     <el-option label="超级用户" value="role1"></el-option>
                                     <el-option label="普通用户" value="role2"></el-option>
@@ -239,12 +239,8 @@ import { mapState } from 'vuex'
                     label: 'deptName'
                 },
                 //  列表数据：personData与personDataShow的关系
-                /*
-                        personData: 数据库数据
-                        personDataShow: 前端发送请求后用于展示的数据，后期可以把personnData给删除，用以减小前端代码体积
-                */
-                personData: this.$store.state.allUser.allUserList,
-                personDataShow:[],
+                // personData: this.$store.state.allUser.allUserList,
+                // personDataShow:[],
                 tableForm: {
                     pageNo:1,       // 默认当前是第一页
                     pageSize:8,    // 当前每页的数据是10条
@@ -254,27 +250,27 @@ import { mapState } from 'vuex'
                 centerDialogVisibleUpdate: false,
                 centerDialogVisibleAdd: false,
                 ruleForm: {
-                    id:'',
-                    name: '',
-                    sector: '',
-                    phone:'',
-                    status: false,
+                    userId:'',
+                    nickName: '',
+                    deptName: '',
+                    phonenumber:'',
+                    status: '',
                     date: '',
-                    role:'',
+                    roleName:'',
                 },
                 rules: {
-                    name: [
+                    nickName: [
                         { required: true, message: '请输入用户昵称', trigger: 'blur' },
                         { min: 1, max: 5, message: '长度在 1 到 5 个字符', trigger: 'blur' }
                     ],
-                    // sector: [
+                    // deptName: [
                     //     { required: true, message: '请输入归属部门', trigger: 'blur' },
                     // ],
-                    phone: [
+                    phonenumber: [
                         { required: true, message: '请输入电话号码', trigger: 'blur' },
                         { min: 11, max: 11, message: '长度为 11 个字符', trigger: 'blur' }
                     ],
-                    // role: [
+                    // roleName: [
                     //     { required: false, message: '请选择用户角色', trigger: 'change' }
                     // ],
                 },
@@ -285,29 +281,51 @@ import { mapState } from 'vuex'
             }
         },
         computed: {
-            ...mapState('department', ['departmentList'])
+            ...mapState('department', ['departmentList']),
+            ...mapState('allUser', ['allUserList']),
+            personData() {
+                // 深拷贝
+                return JSON.parse(JSON.stringify(this.allUserList))
+            },
+            personDataShow:{
+                get(){
+                    let arr = []
+                    let start = this.tableForm.pageNo - 1
+                    for(let i = 0;i < this.tableForm.pageSize;i++){
+                        if(this.personData[start * this.tableForm.pageSize + i]){
+                            arr[i] = this.personData[start * this.tableForm.pageSize + i]
+                        }
+                        else {
+                            break
+                        }
+                    }
+                    this.tableForm.totalCount = this.personData.length
+                    return arr
+                },
+                set(value){console.log(value)}
+            },
         },
         methods:{
             //侧边栏部门点击事件
             handleNodeClick(sector){
-                this.personData = this.$store.state.allUser.allUserList
-                 if(sector.children && sector.children.length){
+                // this.personData = this.$store.state.allUser.allUserList
+                 if(sector.sub && sector.sub.length){
                     this.personDataShow = this.personData.filter((data) => {
                         let flag = 0
-                        for(let i = 0;i < sector.children.length;i++){
-                            if(data.sector === sector.label || data.sector === sector.children[i].label) flag = 1
+                        for(let i = 0;i < sector.sub.length;i++){
+                            if(data.deptName === sector.deptName || data.deptName === sector.sub[i].deptName) flag = 1
                         }
                         return flag
                     })
                 } else {
                     this.personDataShow = this.personData.filter((data) => {
-                        return data.sector === sector.label
+                        return data.deptName === sector.deptName
                     })
                 }
                 this.tableForm.totalCount = this.personDataShow.length
             },
             //表单数据操作
-            getCount(){       
+            getCount(){
                 this.tableForm.totalCount = this.personData.length
             },
             getList(){
@@ -325,32 +343,21 @@ import { mapState } from 'vuex'
             },
             handleSizeChange(val) {                 // 修改每页所存数据量的值所触发的函数
                 this.tableForm.pageSize = val;      // 修改页的大小
-                this.getList();                     // 按新的pageNo和pageSize进行查询
+                // this.getList();                     // 按新的pageNo和pageSize进行查询
             },
             handleCurrentChange(val) {                  // 修改当前页所触发的函数
                 this.tableForm.pageNo = val;            // 更新当前的页
-                this.getList();                         // 按新的pageNo和pageSize进行查询
-            },
-            toggleSelection(rows) {
-                if (rows) {
-                rows.forEach(row => {
-                    this.$refs.multipleTable.toggleRowSelection(row);
-                });
-                } else {
-                    his.$refs.multipleTable.clearSelection();
-                }
+                // this.getList();                         // 按新的pageNo和pageSize进行查询
             },
             handleSelectionChange(val) {
                 this.multipleSelection = val;
             },
             updatePersonData(userId){
-                console.log(this.ruleForm.status+'###')
                 let person = []
                 person = this.personDataShow.filter((data) => {
-                    return data.id === userId
+                    return data.userId === userId
                 })
                 this.ruleForm = person[0]
-                console.log(this.ruleForm.status+'@@@@'+person[0].status)
             },
             submitForm(formName) {  
                 this.$refs[formName].validate((valid) => {
@@ -412,33 +419,30 @@ import { mapState } from 'vuex'
                 this.getList()
             },
             searchByCondition(){
-                if (this.nameInput) {//搜索名称
-                    // this.personDataShow = this.personDataShow.filter((item) => {
-                    //     return data.name === this.nameInput
-                    // })
-                    this.personData = this.personData.filter(item=>item.name.includes(this.nameInput))
-                }
-                if (this.phoneInput) {//搜索时间
-                    this.personData = this.personData.filter((data) => {
-                        return data.phone === this.phoneInput
-                    })
-                }
-                this.personDataShow = this.personData
-                this.tableForm.totalCount = this.personDataShow.length
+                // if (this.nameInput) {//搜索名称
+                //     this.personData = this.personData.filter(item=>item.nickName.includes(this.nameInput))
+                // }
+                // if (this.phoneInput) {//搜索时间
+                //     this.personData = this.personData.filter((data) => {
+                //         return data.phonenumber === this.phoneInput
+                //     })
+                // }
+                // this.personDataShow = this.personData
+                // this.tableForm.totalCount = this.personDataShow.length
+                
             }
         },
-        watch:{
-            personDataShow:{
-                immediate:true,
-                deep:true,
-                handler(){
-                }
-            }
-        },
+        // watch:{
+        //     personDataShow:{
+        //         immediate:true,
+        //         deep:true,
+        //         handler(){}
+        //     }
+        // },
         mounted() {
-            this.getCount();    // 获取当前数据的总数
-            this.getList();     // 按当前的页号和每页的数据量进行查询
             this.$store.dispatch('allUser/getAllUserList')
+            this.getCount();    // 获取当前数据的总数
+            // this.getList();     // 按当前的页号和每页的数据量进行查询
         }
     }
 </script>
