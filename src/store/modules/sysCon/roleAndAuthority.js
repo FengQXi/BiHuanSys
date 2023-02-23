@@ -1,4 +1,4 @@
-import { reqRoleList } from '@/api/sysCon/role'
+import { reqRoleList, reqAddRole, reqDeleteRole } from '@/api/sysCon/role'
 
 const getDefaultState = () => {
     return {
@@ -30,22 +30,42 @@ const getDefaultState = () => {
                 authorityName: '部门管理',
             }]
         }],
-        allAuthorityList: [{
-            authorityId: '11',
-            authorityName: '用户管理',
+        allAuthorityList: [
+        {
+            menuId: '2',
+            menuName: 'SearchManagement',
+            name: '问题查询'
         },
         {
-            authorityId: '12',
-            authorityName: '角色管理管理',
+            menuId: '3',
+            menuName: 'ProblemEntry',
+            name: '问题录入'
         },
         {
-            authorityId: '13',
-            authorityName: '部门管理',
+            menuId: '4',
+            menuName: 'ProblemSolve',
+            name: '问题处理'
         },
         {
-            authorityId: '14',
-            authorityName: '图表管理',
-        }
+            menuId: '5',
+            menuName: 'TemplateManage',
+            name: '模板管理'
+        },
+        {
+            menuId: '7',
+            menuName: 'UserManagement',
+            name: '用户管理'
+        },
+        {
+            menuId: '8',
+            menuName: 'RoleManagement',
+            name: '角色管理'
+        },
+        {
+            menuId: '9',
+            menuName: 'DepartmentManagement',
+            name: '部门管理'
+        },
         ],
     }
 }
@@ -53,16 +73,31 @@ const getDefaultState = () => {
 const state = getDefaultState()
 
 const actions = {
-    async getRoleList() {
+    async getRoleList({ commit }) {
         let result = await reqRoleList()
+        // console.log(result)
         if (result.code == 200) {
-            commit(state, result.data.list)
+            commit('SET_ROLELIST', result.data)
         }
+    },
+
+    async addRole({commit}, role) {
+        let result = await reqAddRole(role)
+        console.log(result);
+        // if(result.code == 200) {
+
+        // }
+    },
+
+    async deleteRole({commit}, roleId) {
+        let result = await reqDeleteRole(roleId)
+        console.log(result)
     }
 }
 
 const mutations = {
     SET_ROLELIST: (state, list) => {
+        // console.log(list)
         state.roleList = list
     }
 }

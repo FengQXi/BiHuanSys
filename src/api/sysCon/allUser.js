@@ -1,8 +1,9 @@
 import request from '@/utils/request'
 
 export const reqAllUserList = () => {
+    console.log("*");
     return request({
-        url: '',
-        method: '',
+        url: '/system/user/list',
+        method: 'get',
     })
 }

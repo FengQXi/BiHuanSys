@@ -1,4 +1,4 @@
-import { reqDepartList } from '@/api/sysCon/department'
+import { reqDepartList, reqAddDepart, reqDeleteDepart } from '@/api/sysCon/department'
 
 const getDefaultState = () => {
     return {
@@ -70,11 +70,28 @@ const getDefaultState = () => {
 const state = getDefaultState()
 
 const actions = {
-    async getDepartList() {
+    async getDepartList({ commit }) {
         let result = await reqDepartList()
+        // console.log(result)
         if (result.code == 200) {
-            commit('SET_DEPART', result.data.list)
+            commit('SET_DEPART', result.data)
         }
+    },
+    async addDepart({ commit }, depart) {
+        console.log(depart)
+        let result = await reqAddDepart(depart)
+        // console.log(result)
+        // if(result.code == 200) {
+        //     // 添加成功之后，修改列表
+        //     commit()
+        // }
+    },
+    async deleteDepart({ commit }, deptId) {
+        let result = await reqDeleteDepart(deptId)
+        console.log(result)
+        // if(result.code == 200) {
+        //     commit()
+        // }
     }
 }
 

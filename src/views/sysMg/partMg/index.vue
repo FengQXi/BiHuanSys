@@ -4,24 +4,24 @@
             @click="dialogFormVisible = true">添加部门</el-button>
 
 
-        <el-table :data="depart" style="width: 100%;margin-bottom: 20px;" row-key="id" border default-expand-all
-            :tree-props="{ children: 'children' }">
+        <el-table :data="departmentList" style="width: 100%;margin-bottom: 20px;" row-key="deptId" border default-expand-all
+            :tree-props="{ children: 'sub' }">
 
-            <el-table-column prop="date" label="创建日期" sortable width="280">
+            <el-table-column prop="createTime" label="创建日期" sortable width="280">
             </el-table-column>
 
             <el-table-column label="部门名称" width="280">
                 <template slot-scope="{row, $index}">
-                    <el-tag v-if="row.children" size="medium" type="success">{{ row.label }}</el-tag>
-                    <el-tag v-else size="medium" type="success" style="float: right">{{ row.label }}</el-tag>
+                    <el-tag v-if="row.sub" size="medium" type="success">{{ row.deptName }}</el-tag>
+                    <el-tag v-else size="medium" type="success" style="float: right">{{ row.deptName }}</el-tag>
                 </template>
             </el-table-column>
 
             <el-table-column label="操作" align="right">
                 <template slot-scope="{row, $index}">
-                    <el-button v-if="row.children" size="mini" type="primary" @click="dialogFormVisible = true">添加下级部门</el-button>
+                    <el-button v-if="row.sub" size="mini" type="primary" @click="dialogFormVisible = true">添加下级部门</el-button>
 
-                    <el-button size="mini" type="danger">删除</el-button>
+                    <el-button size="mini" type="danger" @click="deleteDepart(row)">删除</el-button>
                 </template>
             </el-table-column>
 
@@ -42,21 +42,23 @@
             </div>
         </el-tree> -->
 
-        <el-dialog title="添加部门" :visible.sync="dialogFormVisible">
+        <el-dialog title="添加部门" :visible.sync="dialogFormVisible" @close="cancel()">
             <el-form :model="formData">
                 <el-form-item label="部门名称" label-width="120px">
-                    <el-input v-model="formData.newDepartName" autocomplete="off"></el-input>
+                    <el-input v-model="formData.deptName"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+                <el-button @click="cancel()">取 消</el-button>
+                <el-button type="primary" @click="addDepart()">确 定</el-button>
             </div>
         </el-dialog>
     </div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 let id = 1000
 
 export default {
@@ -101,11 +103,14 @@ export default {
         return {
             dialogFormVisible: false,
             data: JSON.parse(JSON.stringify(data)),
-            depart: this.$store.state.department.departmentList,
             formData: {
-                newDepartName: ''
+                parentId: '',
+                deptName: '',
             },
         }
+    },
+    computed: {
+        ...mapState('department', ['departmentList']),
     },
     methods: {
         // addDepart(setLevel) {
@@ -119,13 +124,13 @@ export default {
         // },
 
         // 在传入的节点下增加节点
-        append(data) {
-            const newChild = { id: id++, label: 'testtest', level: '2', children: [] };
-            if (!data.children) {
-                this.$set(data, 'children', []);
-            }
-            data.children.push(newChild);
-        },
+        // append(data) {
+        //     const newChild = { id: id++, label: 'testtest', level: '2', children: [] };
+        //     if (!data.children) {
+        //         this.$set(data, 'children', []);
+        //     }
+        //     data.children.push(newChild);
+        // },
 
         // 移除点击的节点
         remove(node, data) {
@@ -134,7 +139,26 @@ export default {
             const index = children.findIndex(d => d.id === data.id);
             children.splice(index, 1);
         },
-    }
+        addDepart() {
+            this.$store.dispatch('department/addDepart', this.formData)
+        },
+        deleteDepart(row) {
+            // console.log(row);
+            this.$store.dispatch('department/deleteDepart', row.deptId)
+        },
+        cancel() {
+            console.log("123");
+            this.formData = { // 清空数据
+                parentId: '',
+                deptName: '',
+            }
+            this.dialogFormVisible = false
+        },
+    },
+    mounted() {
+        //获取所有部门信息
+        this.$store.dispatch('department/getDepartList')
+    },
 }
 </script>
 

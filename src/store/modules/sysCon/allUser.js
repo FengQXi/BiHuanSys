@@ -106,10 +106,12 @@ const state = getDefaultState()
 
 const actions = {
     async getAllUserList() {
+        console.log("#")
         let result = await reqAllUserList()
-        if (result.code == 200) {
-            commit('SET_USERLIST', result.data.list)
-        }
+        console.log(result);
+        // if (result.code == 200) {
+        //     commit('SET_USERLIST', result.data.list)
+        // }
     }
 }
 

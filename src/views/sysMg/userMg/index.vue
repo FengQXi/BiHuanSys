@@ -34,7 +34,7 @@
             <el-container>
                 <el-aside width="200px">
                     <el-tree
-                        :data="sectorData"
+                        :data="departmentList"
                         :props="defaultProps"
                         accordion
                         @node-click="handleNodeClick">
@@ -143,7 +143,7 @@
                                 <!-- <el-input v-model="ruleForm.sector"></el-input> -->
                                 <el-select v-model="ruleForm.sector" placeholder="请选择部门">
                                     <el-option
-                                        v-for="item in sectorData"
+                                        v-for="item in departmentList"
                                         :key="item.id"
                                         :label="item.label"
                                         :value="item.id">
@@ -229,15 +229,17 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
     export default {
         name: 'UserManagement',
         data() {
             return {
                 //侧边栏部门数据
-                sectorData: this.$store.state.department.departmentList,
+                // sectorData: this.$store.state.department.departmentList,
                 defaultProps: {
-                    children: 'children',
-                    label: 'label'
+                    children: 'sub',
+                    label: 'deptName'
                 },
                 //  列表数据：personData与personDataShow的关系
                 /*
@@ -285,9 +287,8 @@
 
             }
         },
-        mounted(){              // 页面加载之前执行的函数s
-            this.getCount();    // 获取当前数据的总数
-            this.getList();     // 按当前的页号和每页的数据量进行查询
+        computed: {
+            ...mapState('department', ['departmentList'])
         },
         methods:{
             //侧边栏部门点击事件
@@ -432,6 +433,11 @@
                 handler(){
                 }
             }
+        },
+        mounted() {
+            this.getCount();    // 获取当前数据的总数
+            this.getList();     // 按当前的页号和每页的数据量进行查询
+            this.$store.dispatch('allUser/getAllUserList')
         }
     }
 </script>

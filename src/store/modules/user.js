@@ -5,8 +5,8 @@ import { resetRouter } from '@/router'
 const getDefaultState = () => {
     return {
         token: getToken(),
-        name: '',
-        avatar: ''
+        name: 'Super Admin',
+        avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif'
     }
 }
 
@@ -30,9 +30,12 @@ const mutations = {
 const actions = {
     // user login
     async login({ commit }, userInfo) {
-        const { username, password } = userInfo
-        let result = await login({username: username.trim(), password: password})
-        if(result.code == 20000) {
+        const userName = userInfo.username
+        const password = userInfo.password
+        let result = await login({userName: userName.trim(), password: password})
+        console.log(result)
+        if(result.code == 200) {
+            console.log(result.data.token)
             commit('SET_TOKEN', result.data.token)
             setToken(result.data.token)
             return 'ok'
