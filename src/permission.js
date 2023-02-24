@@ -32,6 +32,7 @@ router.beforeEach(async(to, from, next) => {
       } else {
         try {
           // get user info
+          console.log('getInfo')
           await store.dispatch('user/getInfo')
 
           next()

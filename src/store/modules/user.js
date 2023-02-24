@@ -5,8 +5,9 @@ import { resetRouter } from '@/router'
 const getDefaultState = () => {
     return {
         token: getToken(),
-        name: 'Super Admin',
-        avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif'
+        name: '',
+        avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
+        
     }
 }
 
@@ -33,9 +34,9 @@ const actions = {
         const userName = userInfo.username
         const password = userInfo.password
         let result = await login({userName: userName.trim(), password: password})
-        console.log(result)
+        // console.log(result)
         if(result.code == 200) {
-            console.log(result.data.token)
+            // console.log(result.data.token)
             commit('SET_TOKEN', result.data.token)
             setToken(result.data.token)
             return 'ok'
@@ -57,24 +58,26 @@ const actions = {
     },
 
     // get user info
-    getInfo({ commit, state }) {
-        return new Promise((resolve, reject) => {
-            getInfo(state.token).then(response => {
-                const { data } = response
+    async getInfo({ commit, state }) {
+        let result = await getInfo(state.token)
+        console.log(result)
+        // return new Promise((resolve, reject) => {
+        //     getInfo(state.token).then(response => {
+        //         const { data } = response
 
-                if (!data) {
-                    return reject('Verification failed, please Login again.')
-                }
+        //         if (!data) {
+        //             return reject('Verification failed, please Login again.')
+        //         }
 
-                const { name, avatar } = data
+        //         const { name, avatar } = data
 
-                commit('SET_NAME', name)
-                commit('SET_AVATAR', avatar)
-                resolve(data)
-            }).catch(error => {
-                reject(error)
-            })
-        })
+        //         commit('SET_NAME', name)
+        //         commit('SET_AVATAR', avatar)
+        //         resolve(data)
+        //     }).catch(error => {
+        //         reject(error)
+        //     })
+        // })
     },
 
     // user logout
