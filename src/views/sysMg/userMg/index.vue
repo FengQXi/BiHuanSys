@@ -340,7 +340,7 @@
         methods:{
             //侧边栏部门点击事件
             handleNodeClick(sector){
-                this.searchdata.idInput = ''
+                this.searchdata.nameInput = ''
                 this.searchdataphoneInput = ''
                 this.searchdata.deptId = sector.deptId
                 this.$store.dispatch('allUser/getAllUserList',this.searchdata)//顶部按钮点击
@@ -449,7 +449,7 @@
         // },
         mounted() {
             //传入分页的数据，返回当前页展示的数据
-            // this.$store.dispatch('allUser/getAllUserList',this.searchdata,this.tableForm)
+            //this.$store.dispatch('allUser/getAllUserList',this.searchdata,this.tableForm)
             this.$store.dispatch('allUser/getAllUserList')
         }
     }

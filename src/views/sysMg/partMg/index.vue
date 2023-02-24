@@ -7,7 +7,10 @@
         <el-table :data="departmentList" style="width: 100%;margin-bottom: 20px;" row-key="deptId" border default-expand-all
             :tree-props="{ children: 'sub' }">
 
-            <el-table-column prop="createTime" label="创建日期" sortable width="280">
+            <el-table-column label="创建日期" sortable width="280">
+                <template slot-scope="{row, $index}">
+                    <span style="margin-left: 10px">{{ row.createTime }}</span>
+                </template>
             </el-table-column>
 
             <el-table-column label="部门名称" width="280">
@@ -19,7 +22,8 @@
 
             <el-table-column label="操作" align="right">
                 <template slot-scope="{row, $index}">
-                    <el-button v-if="!row.parentId" size="mini" type="primary" @click="dialogFormVisible = true">添加下级部门</el-button>
+                    <el-button v-if="!row.parentId" size="mini" type="primary"
+                        @click="toAddDepart(row)">添加下级部门</el-button>
 
                     <el-button size="mini" type="danger" @click="deleteDepart(row)">删除</el-button>
                 </template>
@@ -63,6 +67,10 @@ export default {
         ...mapState('department', ['departmentList']),
     },
     methods: {
+        toAddDepart(row) {
+            this.formData.parentId = row.deptId
+            this.dialogFormVisible = true
+        },
         addDepart() {
             this.$store.dispatch('department/addDepart', this.formData)
         },
