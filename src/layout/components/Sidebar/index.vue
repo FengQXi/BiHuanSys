@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import Logo from './Logo'
 import SidebarItem from './SidebarItem'
 import variables from '@/styles/variables.scss'
@@ -30,8 +30,11 @@ export default {
     ...mapGetters([
       'sidebar'
     ]),
+    // ...mapState('user', ['finalRoutes']),
     routes() {
-      return this.$router.options.routes
+      // 遍历user store中的finalRoutes
+      return this.$store.state.user.finalRoutes
+      // return this.$router.options.routes
     },
     activeMenu() {
       const route = this.$route
