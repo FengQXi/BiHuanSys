@@ -10,7 +10,7 @@
                             placeholder="请输入用户昵称"
                             style="width: 180px"
                             prefix-icon="el-icon-search"
-                            v-model="nameInput">
+                            v-model="searchdata.nameInput">
                         </el-input>
                     </div></el-col>
                     <!-- 输入手机号 -->
@@ -20,7 +20,7 @@
                             placeholder="请输入手机号"
                             style="width: 180px"
                             prefix-icon="el-icon-search"
-                            v-model="phoneInput">
+                            v-model="searchdata.phoneInput">
                         </el-input>
                     </div></el-col>
                     <el-col :span="7" class="el-col-last-button"><div class="grid-content bg-purple">
@@ -53,11 +53,10 @@
                     <!-- 表单 -->
                     <el-table
                         ref="multipleTable"
-                        :data="personDataShow"
+                        :data="personData"
                         tooltip-effect="dark"
                         style="width: 100%"
-                        max-height="490px"
-                        @selection-change="handleSelectionChange">
+                        max-height="490px">
                         <el-table-column
                             prop="userId"
                             label="用户Id"
@@ -207,7 +206,7 @@
                                         :value="`${item.deptId}:${item.deptName}`">
                                     </el-option>
                                 </el-select> -->
-                                <el-select v-model="selectDept" placeholder="请选择部门">
+                                <el-select v-model="ruleForm.deptName" placeholder="请选择部门">
                                     <el-option
                                         v-for="item in departmentList"
                                         :key="item.deptId"
@@ -258,22 +257,17 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+    import { mapState } from 'vuex'
 
     export default {
         name: 'UserManagement',
         data() {
             return {
-                selectDept: '',
                 //侧边栏部门数据
-                // sectorData: this.$store.state.department.departmentList,
                 defaultProps: {
                     children: 'sub',
                     label: 'deptName'
                 },
-                //  列表数据：personData与personDataShow的关系
-                // personData: this.$store.state.allUser.allUserList,
-                // personDataShow:[],
                 tableForm: {
                     pageNo:1,       // 默认当前是第一页
                     pageSize:8,    // 当前每页的数据是10条
@@ -310,9 +304,11 @@ import { mapState } from 'vuex'
                     // ],
                 },
                 //顶部搜索栏数据
-                nameInput:'',
-                phoneInput:''
-
+                searchdata:{
+                    nameInput:'',
+                    phoneInput:'',
+                    deptId:'',
+                }
             }
         },
         computed: {
@@ -344,95 +340,65 @@ import { mapState } from 'vuex'
         methods:{
             //侧边栏部门点击事件
             handleNodeClick(sector){
-                // this.personData = this.$store.state.allUser.allUserList
-                 if(sector.sub && sector.sub.length){
-                    this.personDataShow = this.personData.filter((data) => {
-                        let flag = 0
-                        for(let i = 0;i < sector.sub.length;i++){
-                            if(data.deptName === sector.deptName || data.deptName === sector.sub[i].deptName) flag = 1
-                        }
-                        return flag
-                    })
-                } else {
-                    this.personDataShow = this.personData.filter((data) => {
-                        return data.deptName === sector.deptName
-                    })
-                }
-                this.tableForm.totalCount = this.personDataShow.length
+                this.searchdata.idInput = ''
+                this.searchdataphoneInput = ''
+                this.searchdata.deptId = sector.deptId
+                this.$store.dispatch('allUser/getAllUserList',this.searchdata)//顶部按钮点击
             },
-            //表单数据操作
-            getCount(){
-                this.tableForm.totalCount = this.personData.length
-            },
-            getList(){
-                this.personDataShow = []
-                let start = this.tableForm.pageNo - 1
-                for(let i = 0;i < this.tableForm.pageSize;i++){
-                    if(this.personData[start * this.tableForm.pageSize + i]){
-                        this.personDataShow[i] = this.personData[start * this.tableForm.pageSize + i]
-                    }
-                    else {
-                        break
-                    }
-                }
-                this.tableForm.totalCount = this.personData.length
-            },
-
-            handleSizeChange(val) {                 // 修改每页所存数据量的值所触发的函数
+            //分页器数据
+            handleSizeChange(val) {                 
                 this.tableForm.pageSize = val;      // 修改页的大小
-                // this.getList();                     // 按新的pageNo和pageSize进行查询
             },
-            handleCurrentChange(val) {                  // 修改当前页所触发的函数
+            handleCurrentChange(val) {                  
                 this.tableForm.pageNo = val;            // 更新当前的页
-                // this.getList();                         // 按新的pageNo和pageSize进行查询
             },
-            
-            handleSelectionChange(val) {
-                this.multipleSelection = val;
-            },
+            //弹出框事件
             updatePersonData(userId){
                 let person = []
-                person = this.personDataShow.filter((data) => {
+                person = this.personData.filter((data) => {
                     return data.userId === userId
                 })
-                this.ruleForm = person[0]
+                this.ruleForm = person
             },
             submitForm(formName) {  
                 this.$refs[formName].validate((valid) => {
-                if (valid) {
-                    //跟新数据操作
-                    let arr = this.ruleForm.deptName.split(':')
-                    // 修改spu对象
-                    console.log(this.ruleForm.deptName)
-                    this.ruleForm.deptName = arr[1]
-                    this.ruleForm.deptId = arr[0]
-                    // arr = this.ruleForm.roleName.split(':')
-                    arr = this.selectDept.split(':')
-                    // 修改spu对象
-                    this.ruleForm.roleName = arr[1]
-                    this.ruleForm.roleId = arr[0]
-                    console.log(this.ruleForm)
-                    alert('submit!');
-                } else {
-                    console.log('error submit!!');
-                    return false;
-                }
-                });
+                    if (valid) {
+                        //跟新数据操作
+                        let arr = this.ruleForm.deptName.split(':')
+                        // 修改spu对象
+                        console.log(this.ruleForm.deptName)
+                        this.ruleForm.deptName = arr[1]
+                        this.ruleForm.deptId = arr[0]
+                        // arr = this.ruleForm.roleName.split(':')
+                        arr = this.selectDept.split(':')
+                        // 修改spu对象
+                        this.ruleForm.roleName = arr[1]
+                        this.ruleForm.roleId = arr[0]
+                        console.log(this.ruleForm)
+                        alert('submit!');
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                })
             },
             resetForm(formName) {
                 this.$refs[formName].resetFields();
             },
             close() {
                 this.ruleForm = {
-                    id:'',
-                    name: '',
-                    sector: '',
-                    phone:'',
-                    status: false,
-                    date: '',
-                    role:'',
+                    userId:'',
+                    nickName: '',
+                    deptName: '',
+                    phonenumber:'',
+                    status: '',
+                    roleName:'',
+                    createTime:'',
+                    deptId:'',
+                    roleId:'',
                 }
             },
+            //删除操作
             deletePersonData(userId){
                 //删除当前选择的数据,传入参数userId，然后跟新personDataShow
                 this.$confirm('此操作将永久删除该用户, 是否继续?', '提示', {
@@ -453,6 +419,7 @@ import { mapState } from 'vuex'
                     });          
                 });
             },
+            //新增操作
             addPersonData(){
                 let yy = new Date().getFullYear();
                 let mm = new Date().getMonth()+1;
@@ -461,27 +428,18 @@ import { mapState } from 'vuex'
             },
             //顶部事件
             clearAllInput(){
-                //请求数据，更新personDataShow
-                this.idInput = ''
-                this.phoneInput = ''
-                this.personData = this.$store.state.allUser.allUserList
-                this.getList()
+                this.searchdata.idInput = ''
+                this.searchdataphoneInput = ''
+                this.tableForm.pageNo = 1
+                this.tableForm.pageNo = 8
+                this.$store.dispatch('allUser/getAllUserList',this.searchdata,this.tableForm)
+                //显示条数的修改
+                //this.tableForm.totalCount = 
             },
             searchByCondition(){
-                // if (this.nameInput) {//搜索名称
-                //     this.personData = this.personData.filter(item=>item.nickName.includes(this.nameInput))
-                // }
-                // if (this.phoneInput) {//搜索时间
-                //     this.personData = this.personData.filter((data) => {
-                //         return data.phonenumber === this.phoneInput
-                //     })
-                // }
-                // this.personDataShow = this.personData
-                // this.tableForm.totalCount = this.personDataShow.length
-                
+                this.$store.dispatch('allUser/getAllUserList',this.searchdata)//顶部按钮点击
             }
         },
-        // watc
         // watch:{
         //     personDataShow:{
         //         immediate:true,
@@ -490,9 +448,9 @@ import { mapState } from 'vuex'
         //     }
         // },
         mounted() {
+            //传入分页的数据，返回当前页展示的数据
+            // this.$store.dispatch('allUser/getAllUserList',this.searchdata,this.tableForm)
             this.$store.dispatch('allUser/getAllUserList')
-            this.getCount();    // 获取当前数据的总数
-            // this.getList();     // 按当前的页号和每页的数据量进行查询
         }
     }
 </script>
