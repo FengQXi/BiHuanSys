@@ -2,14 +2,14 @@
     <div class="app-container">
         <el-container>
             <el-header>
-                <SearchHeader :searchData="searchData" :updateTableData="updateTableData"></SearchHeader>
+                <SearchHeader :searchProblem="searchProblem" :updateTableData="updateTableData"></SearchHeader>
             </el-header>
             <el-container>
                 <el-aside width="200px">
                     <SearchAside :sectorClick="sectorClick"></SearchAside>
                 </el-aside>
                 <el-main>
-                    <SearchMain :tableData="newTableData"></SearchMain>
+                    <SearchMain :tableData="newTableData" :thePagnation="thePagnation"></SearchMain>
                 </el-main>
             </el-container>
         </el-container>
@@ -26,7 +26,15 @@
         data() {
             return {
                 tableData:[],
-                newTableData:[]
+                newTableData:[],
+                searchData:{
+                    nameInput:'',
+                    dateInput:'',
+                    deptId:'',
+                    pageNo:1,      
+                    pageSize:8,   
+                    totalCount:0    
+                }
             }
         },
         mounted(){
@@ -34,37 +42,60 @@
             this.data()
         },
         methods:{
-            searchData(nameInput,dateInput){
-                if (nameInput) {//搜索名称
-                    this.newTableData = this.tableData.filter((data) => {
-                        return data.name === nameInput
-                    })
-                }
-                if (dateInput) {//搜索时间
-                    this.newTableData = this.tableData.filter((data) => {
-                        return data.date === dateInput
-                    })
-                }
+            //整理搜索数据
+            searchProblem(input){
+                // if (nameInput) {//搜索名称
+                //     this.newTableData = this.tableData.filter((data) => {
+                //         return data.name === nameInput
+                //     })
+                // }
+                // if (dateInput) {//搜索时间
+                //     this.newTableData = this.tableData.filter((data) => {
+                //         return data.date === dateInput
+                //     })
+                // }
+                this.searchData.nameInput = input.nameInput
+                this.searchData.dateInput = input.dateInput
+                this.searchData.pageNo = 1
+                this.searchData.pageSize = 8
             },
-            sectorClick(label,children){
+            sectorClick(data){
                 //需要请求数据，更新tableData 
-                if(children && children.length){
-                    this.newTableData = this.tableData.filter((data) => {
-                        let flag = 0
-                        for(let i = 0;i < children.length;i++){
-                            if(data.department.label === label || data.department.label === children[i].label) flag = 1
-                        }
-                        return flag
-                    })
-                } else {
-                    this.newTableData = this.tableData.filter((data) => {
-                        return data.department.label === label
-                    })
-                }
+                // if(children && children.length){
+                //     this.newTableData = this.tableData.filter((data) => {
+                //         let flag = 0
+                //         for(let i = 0;i < children.length;i++){
+                //             if(data.department.label === label || data.department.label === children[i].label) flag = 1
+                //         }
+                //         return flag
+                //     })
+                // } else {
+                //     this.newTableData = this.tableData.filter((data) => {
+                //         return data.department.label === label
+                //     })
+                // }
+                this.searchData.nameInput = ''
+                this.searchData.dateInput = ''
+                this.searchData.pageNo = 1
+                this.searchData.pageSize = 8
+                this.searchData.deptId = data.deptId
+            },
+            thePagnation(data){
+                this.searchData.pageNo = data.pageNo
+                this.searchData.pageSize = data.pageSize
             },
             updateTableData(){
                 //请求数据,更新tableData
-                this.data()
+                this.searchData = {
+                    nameInput:'',
+                    dateInput:'',
+                    deptId:''
+                }
+                this.$store.dispatch('problem/getProblem',this.searchData)
+            },
+            //请求数据:数据包含状态码为1、2、3
+            requestData(){
+                this.$store.dispatch('problem/getProblem',this.searchData)
             },
             combiningTableData(){
                 this.tableData = [...this.$store.state.problem.pendingSolveList,...this.$store.state.problem.pendingCheckList,...this.$store.state.problem.completedList]

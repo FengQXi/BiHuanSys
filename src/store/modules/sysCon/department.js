@@ -12,7 +12,7 @@ const getDefaultState = () => {
             }, {
                 deptId: 2,
                 createTime: '2000-04-07',
-                label: '重庆总站',
+                deptName: '重庆总站',
                 parentId:null,
                 sub: [{
                     deptId: 3,
@@ -47,13 +47,13 @@ const getDefaultState = () => {
                 sub: [{
                     deptId: 8,
                     createTime: '2013-02-07',
-                    deptName: '成都总站下属部门一',
+                    deptName: '成都总站下属',
                     parentId:null,
                     sub:null
                 }, {
                     deptId: 8,
                     createTime: '2013-02-07',
-                    deptName: '成都总站下属部门二',
+                    deptName: '成都总站部门',
                     parentId:null,
                     sub: null
                 }]

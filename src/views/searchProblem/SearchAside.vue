@@ -17,15 +17,16 @@
             return {
                 sectorData:this.$store.state.department.departmentList,
                 defaultProps: {
-                    children: 'children',
-                    label: 'label'
+                    children: 'sub',
+                    label: 'deptName'
                 }
             };
         },
         methods: {
             handleNodeClick(data) {
-                if(!data.children) this.sectorClick(data.label,null)
-                else this.sectorClick(data.label,data.children)
+                // if(!data.children) this.sectorClick(data.label,null)
+                // else this.sectorClick(data.label,data.children)
+                this.sectorClick(data)
             }
         },
     }

@@ -8,14 +8,14 @@
                     placeholder="请输入检查名称"
                     style="width: 180px"
                     prefix-icon="el-icon-search"
-                    v-model="nameInput">
+                    v-model="searchData.nameInput">
                 </el-input>
             </div></el-col>
              <!-- 输入时间 -->
             <el-col :span="10"><div class="grid-content bg-purple">
                 <div class="block">录入时间
                     <el-date-picker
-                        v-model="dateInput"
+                        v-model="searchData.dateInput"
                         type="date"
                         placeholder="选择录入日期"
                         format="yyyy-MM-dd"
@@ -37,21 +37,23 @@
 <script>
     export default {
         name:'SearchHeader',
-        props:['searchData','updateTableData'],
+        props:['searchProblem','updateTableData'],
         data() {
             return {
-                nameInput:'',
-                dateInput:''
+                searchData:{
+                    nameInput:'',
+                    dateInput:''
+                }
             }
         },
         methods:{
             clearAllInput(){
-                this.nameInput = ''
-                this.dateInput = ''
+                this.searchData.nameInput = ''
+                this.searchData.dateInput = ''
                 this.updateTableData()
             },
             searchByCondition(){
-                this.searchData(this.nameInput,this.dateInput)
+                this.searchProblem(this.searchData)
             }
         }
     }

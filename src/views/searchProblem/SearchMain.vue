@@ -74,7 +74,7 @@
 <script>
     export default {
         name:'SearchMain',
-        props:['tableData'],
+        props:['tableData','thePagnation'],
         data() {
             return {
                 tableDataShow: [],
@@ -94,16 +94,17 @@
                 this.tableForm.totalCount = this.tableData.length
             },
             getList(){
-                this.tableDataShow = []
-                let start = this.tableForm.pageNo - 1
-                for(let i = 0;i < this.tableForm.pageSize;i++){
-                    if(this.tableData[start * this.tableForm.pageSize + i]){
-                        this.tableDataShow[i] = this.tableData[start * this.tableForm.pageSize + i]
-                    }
-                    else {
-                        break
-                    }
-                }
+                // this.tableDataShow = []
+                // let start = this.tableForm.pageNo - 1
+                // for(let i = 0;i < this.tableForm.pageSize;i++){
+                //     if(this.tableData[start * this.tableForm.pageSize + i]){
+                //         this.tableDataShow[i] = this.tableData[start * this.tableForm.pageSize + i]
+                //     }
+                //     else {
+                //         break
+                //     }
+                // }
+                this.thePagnation(this.tableForm)
             },
             handleSizeChange(val) {                 // 修改每页所存数据量的值所触发的函数
                 this.tableForm.pageSize = val;      // 修改页的大小
@@ -111,7 +112,7 @@
             },
             handleCurrentChange(val) {                  // 修改当前页所触发的函数
                 this.tableForm.pageNo = val;            // 更新当前的页
-                this.getList();                         // 按新的pageNo和pageSize进行查询
+                this.getList();                      // 按新的pageNo和pageSize进行查询
             },
             timeout(value){
                 var entryTime = Date.parse(new Date(value.entryTime));
