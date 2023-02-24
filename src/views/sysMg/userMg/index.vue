@@ -141,9 +141,9 @@
                                 <el-select v-model="ruleForm.deptName" placeholder="请选择部门">
                                     <el-option
                                         v-for="item in departmentList"
-                                        :key="item.id"
-                                        :label="item.label"
-                                        :value="item.id">
+                                        :key="item.deptId"
+                                        :label="item.deptName"
+                                        :value="item.deptName">
                                     </el-option>
                                 </el-select>
                             </el-form-item>
@@ -151,9 +151,17 @@
                                 <el-input v-model="ruleForm.phonenumber"></el-input>
                             </el-form-item>
                             <el-form-item label="用户角色" prop="roleName" show-message:false>
-                                <el-select v-model="ruleForm.region" placeholder="请选择用户角色">
+                                <!-- <el-select v-model="ruleForm.roleName" placeholder="请选择用户角色">
                                     <el-option label="超级用户" value="role1"></el-option>
                                     <el-option label="普通用户" value="role2"></el-option>
+                                </el-select> -->
+                                <el-select v-model="ruleForm.roleName" placeholder="请选择用户角色">
+                                    <el-option
+                                        v-for="item in roleList"
+                                        :key="item.roleId"
+                                        :label="item.roleName"
+                                        :value="item.roleName">
+                                    </el-option>
                                 </el-select>
                             </el-form-item>
                             <el-form-item label="状态" prop="status">
@@ -189,16 +197,40 @@
                             <el-form-item label="用户昵称" prop="nickName">
                                 <el-input v-model="ruleForm.nickName"></el-input>
                             </el-form-item>
-                            <el-form-item label="归属部门" prop="deptName">
-                                <el-input v-model="ruleForm.deptName"></el-input>
+                            <el-form-item label="归属部门">
+                                <!-- <el-input v-model="ruleForm.deptName"></el-input> -->
+                                <!-- <el-select v-model="ruleForm.deptName" placeholder="请选择部门">
+                                    <el-option
+                                        v-for="item in departmentList"
+                                        :key="item.deptId"
+                                        :label="item.deptName"
+                                        :value="`${item.deptId}:${item.deptName}`">
+                                    </el-option>
+                                </el-select> -->
+                                <el-select v-model="selectDept" placeholder="请选择部门">
+                                    <el-option
+                                        v-for="item in departmentList"
+                                        :key="item.deptId"
+                                        :label="item.deptName"
+                                        :value="`${item.deptId}:${item.deptName}`">
+                                    </el-option>
+                                </el-select>
                             </el-form-item>
                             <el-form-item label="手机电话" prop="phonenumber">
                                 <el-input v-model="ruleForm.phonenumber"></el-input>
                             </el-form-item>
                             <el-form-item label="用户角色" prop="roleName" show-message:false>
-                                <el-select v-model="ruleForm.region" placeholder="请选择用户角色">
+                                <!-- <el-select v-model="ruleForm.region" placeholder="请选择用户角色">
                                     <el-option label="超级用户" value="role1"></el-option>
                                     <el-option label="普通用户" value="role2"></el-option>
+                                </el-select> -->
+                                <el-select v-model="ruleForm.roleName" placeholder="请选择用户角色">
+                                    <el-option
+                                        v-for="item in roleList"
+                                        :key="item.roleId"
+                                        :label="item.roleName"
+                                        :value="`${item.roleId}:${item.roleName}`">
+                                    </el-option>
                                 </el-select>
                             </el-form-item>
                             <el-form-item label="状态" prop="status">
@@ -232,6 +264,7 @@ import { mapState } from 'vuex'
         name: 'UserManagement',
         data() {
             return {
+                selectDept: '',
                 //侧边栏部门数据
                 // sectorData: this.$store.state.department.departmentList,
                 defaultProps: {
@@ -255,8 +288,10 @@ import { mapState } from 'vuex'
                     deptName: '',
                     phonenumber:'',
                     status: '',
-                    date: '',
                     roleName:'',
+                    createTime:'',
+                    deptId:'',
+                    roleId:'',
                 },
                 rules: {
                     nickName: [
@@ -283,6 +318,7 @@ import { mapState } from 'vuex'
         computed: {
             ...mapState('department', ['departmentList']),
             ...mapState('allUser', ['allUserList']),
+            ...mapState('roleAndAuthority',['roleList']),
             personData() {
                 // 深拷贝
                 return JSON.parse(JSON.stringify(this.allUserList))
@@ -302,7 +338,7 @@ import { mapState } from 'vuex'
                     this.tableForm.totalCount = this.personData.length
                     return arr
                 },
-                set(value){console.log(value)}
+                set(value){}
             },
         },
         methods:{
@@ -341,6 +377,7 @@ import { mapState } from 'vuex'
                 }
                 this.tableForm.totalCount = this.personData.length
             },
+
             handleSizeChange(val) {                 // 修改每页所存数据量的值所触发的函数
                 this.tableForm.pageSize = val;      // 修改页的大小
                 // this.getList();                     // 按新的pageNo和pageSize进行查询
@@ -349,6 +386,7 @@ import { mapState } from 'vuex'
                 this.tableForm.pageNo = val;            // 更新当前的页
                 // this.getList();                         // 按新的pageNo和pageSize进行查询
             },
+            
             handleSelectionChange(val) {
                 this.multipleSelection = val;
             },
@@ -363,6 +401,17 @@ import { mapState } from 'vuex'
                 this.$refs[formName].validate((valid) => {
                 if (valid) {
                     //跟新数据操作
+                    let arr = this.ruleForm.deptName.split(':')
+                    // 修改spu对象
+                    console.log(this.ruleForm.deptName)
+                    this.ruleForm.deptName = arr[1]
+                    this.ruleForm.deptId = arr[0]
+                    // arr = this.ruleForm.roleName.split(':')
+                    arr = this.selectDept.split(':')
+                    // 修改spu对象
+                    this.ruleForm.roleName = arr[1]
+                    this.ruleForm.roleId = arr[0]
+                    console.log(this.ruleForm)
                     alert('submit!');
                 } else {
                     console.log('error submit!!');
@@ -432,6 +481,7 @@ import { mapState } from 'vuex'
                 
             }
         },
+        // watc
         // watch:{
         //     personDataShow:{
         //         immediate:true,

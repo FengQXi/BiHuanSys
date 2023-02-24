@@ -4,65 +4,119 @@ const getDefaultState = () => {
     return {
         departmentList: [
             {
-                id: 100,
-                date: '2013-02-07',
-                label: '项目部',
-                children: []
+                deptId: 1,
+                createTime: '2013-02-07',
+                deptName: '项目部',
+                parentId:null,
+                sub: null
             }, {
-                id: 101,
-                date: '2000-04-07',
+                deptId: 2,
+                createTime: '2000-04-07',
                 label: '重庆总站',
-                children: [{
-                    id: 101101,
-                    date: '2013-02-07',
-                    label: '重庆总站下属部门',
+                parentId:null,
+                sub: [{
+                    deptId: 3,
+                    createTime: '2013-02-07',
+                    deptName: '重庆总站下属部门',
+                    parentId:2,
+                    sub:null
                 }]
             }, {
-                id: 102,
-                date: '2003-11-09',
-                label: '川南总站',
-                children: [{
-                    id: 102102,
-                    date: '2013-02-07',
-                    label: '川南总站下属部门一'
+                deptId: 4,
+                createTime: '2003-11-09',
+                deptName: '川南总站',
+                parentId:null,
+                sub: [{
+                    deptId: 5,
+                    createTime: '2013-02-07',
+                    deptName: '川南总站下属',
+                    parentId:4,
+                    sub:null
                 }, {
-                    id: 6,
-                    date: '2013-02-07',
-                    label: '川南总站下属部门二'
+                    deptId: 6,
+                    createTime: '2013-02-07',
+                    deptName: '川南总站部门',
+                    parentId:4,
+                    sub:null
                 }]
             }, {
-                id: 104,
-                date: '2019-12-07',
-                label: '成都总站',
-                children: [{
-                    id: 7,
-                    date: '2013-02-07',
-                    label: '成都总站下属部门一'
+                deptId: 7,
+                createTime: '2019-12-07',
+                deptName: '成都总站',
+                parentId:null,
+                sub: [{
+                    deptId: 8,
+                    createTime: '2013-02-07',
+                    deptName: '成都总站下属部门一',
+                    parentId:null,
+                    sub:null
                 }, {
-                    id: 8,
-                    date: '2013-02-07',
-                    label: '成都总站下属部门二'
+                    deptId: 8,
+                    createTime: '2013-02-07',
+                    deptName: '成都总站下属部门二',
+                    parentId:null,
+                    sub: null
                 }]
             }, {
-                id: 105,
-                date: '2013-02-07',
-                label: '办公室',
-                children: []
+                deptId: 10,
+                createTime: '2013-02-07',
+                deptName: '办公室',
+                parentId:null,
+                sub: null
             }, {
-                id: 106,
-                date: '2013-02-07',
-                label: '财务共享中心',
-                children: []
+                deptId: 11,
+                createTime: '2013-02-07',
+                deptName: '财务共享中心',
+                parentId:null,
+                sub: null
             }, {
-                id: 107,
-                date: '2013-02-07',
-                label: '物联网业务部',
-                children: []
+                deptId: 12,
+                createTime: '2013-02-07',
+                deptName: '物联网业务部',
+                parentId:null,
+                sub: null
             }, {
-                id: 108,
-                date: '2013-02-07',
-                label: '党群科',
-                children: []
+                deptId: 13,
+                createTime: '2013-02-07',
+                deptName: '党群科',
+                parentId:null,
+                sub: null
+            },{
+                deptId: 14,
+                createTime: '2013-02-07',
+                deptName: '财务科',
+                parentId:null,
+                sub: null
+            },{
+                deptId: 15,
+                createTime: '2013-02-07',
+                deptName: '财务科',
+                parentId:null,
+                sub: null
+            },{
+                deptId: 16,
+                createTime: '2013-02-07',
+                deptName: '川中总站',
+                parentId:null,
+                sub: [{ 
+                        deptId: 17,
+                        createTime: '2013-02-07',
+                        deptName: '川中总站下属',
+                        parentId:16,
+                        sub: null
+                    },{ 
+                        deptId: 18,
+                        createTime: '2013-02-07',
+                        deptName: '川中总站部门',
+                        parentId:16,
+                        sub: null
+                    }]
+            },{
+                deptId: 19,
+                createTime: '2013-02-07',
+                deptName: '环保科',
+                parentId:null,
+                sub: null
             }]
     }
 }
