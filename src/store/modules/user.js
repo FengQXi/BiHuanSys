@@ -1,12 +1,14 @@
 import { login, logout, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
-import { resetRouter } from '@/router'
+import { resetRouter, constantRoutes, asyncRoutes, anyRoutes } from '@/router'
 
 const getDefaultState = () => {
     return {
         token: getToken(),
         name: 'Super Admin',
-        avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif'
+        avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
+        routes: [], // 服务器返回的菜单信息
+        finalRoutes: [], // 通过用户信息，计算出来的异步路由
     }
 }
 
@@ -24,7 +26,10 @@ const mutations = {
     },
     SET_AVATAR: (state, avatar) => {
         state.avatar = avatar
-    }
+    },
+    SET_FINALROUTES: (state, routes) => {
+        state.finalRoutes = routes
+    },
 }
 
 const actions = {
@@ -99,6 +104,25 @@ const actions = {
             resolve()
         })
     }
+}
+
+// 计算用户路由
+const calculateRoutes = (routes) => {
+    const finalAsyncRoutes = asyncRoutes.filter(item => {
+        console.log(item)
+        item.children.filter(child => {
+            return routes.some(item1 => {
+                console.log(child)
+                console.log(item1)
+            })
+        })
+
+        if(item.children.length) {
+            return true
+        }
+    })
+
+    return constantRoutes.concat(finalAsyncRoutes, anyRoutes)
 }
 
 export default {
