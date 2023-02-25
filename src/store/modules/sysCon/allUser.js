@@ -1,4 +1,4 @@
-import { reqAllUserList } from "@/api/sysCon/allUser";
+import { reqAddUser, reqAllUserList, reqUpdateUser, reqDeleteUser } from "@/api/sysCon/allUser";
 
 const getDefaultState = () => {
     return {
@@ -327,7 +327,8 @@ const getDefaultState = () => {
             userId: 1,
             userName: "admin",
             userType: null,
-        }]
+        }],
+        totalCount: 12,
     }
 }
 
@@ -335,18 +336,34 @@ const state = getDefaultState()
 
 const actions = {
     async getAllUserList({ commit }, param) {
-        console.log(param, "(((")
+        // console.log(param, "(((")
         let result = await reqAllUserList(param)
         console.log(result);
         if (result.code == 200) {
-            commit('SET_USERLIST', result.data)
+            commit('SET_USERLIST', result.data.records)
+            commit('SET_TOTAL', result.data.total)
         }
+    },
+
+    async addUser({commit}, param) {
+        let result = await reqAddUser(param)
+    },
+
+    async updateUser({commit}, param) {
+        let result = await reqUpdateUser(param)
+    },
+
+    async deleteUser({commit}, userId) {
+        let result = await reqDeleteUser(userId)
     }
 }
 
 const mutations = {
     SET_USERLIST: (state, list) => {
         state.allUserList = list
+    },
+    SET_TOTAL: (state, total) => {
+        state.totalCount = total
     }
 }
 
