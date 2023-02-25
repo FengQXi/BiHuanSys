@@ -9,7 +9,7 @@
 
             <el-table-column label="创建日期" sortable width="280">
                 <template slot-scope="{row, $index}">
-                    <span style="margin-left: 10px">{{ row.createTime }}</span>
+                    <span style="margin-left: 10px">{{ row.createTime.slice(0, 10) }}</span>
                 </template>
             </el-table-column>
 
@@ -33,14 +33,14 @@
 
 
 
-        <el-dialog title="添加部门" :visible.sync="dialogFormVisible" @close="cancel()">
+        <el-dialog title="添加部门" :visible.sync="dialogFormVisible" @close="closeDialog()">
             <el-form :model="formData">
                 <el-form-item label="部门名称" label-width="120px">
                     <el-input v-model="formData.deptName"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="cancel()">取 消</el-button>
+                <el-button @click="closeDialog()">取 消</el-button>
                 <el-button type="primary" @click="addDepart()">确 定</el-button>
             </div>
         </el-dialog>
@@ -73,12 +73,13 @@ export default {
         },
         addDepart() {
             this.$store.dispatch('department/addDepart', this.formData)
+            this.closeDialog()
         },
         deleteDepart(row) {
             // console.log(row);
             this.$store.dispatch('department/deleteDepart', row.deptId)
         },
-        cancel() {
+        closeDialog() {
             this.formData = { // 清空数据
                 parentId: '',
                 deptName: '',

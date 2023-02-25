@@ -1,8 +1,9 @@
 import request from '@/utils/request'
 
-export const reqAllUserList = () => {
+export const reqAllUserList = (param) => {
     return request({
-        url: '/system/user/list',
-        method: 'get',
+        url: '/system/user/getUser',
+        method: 'post',
+        data: param,
     })
 }

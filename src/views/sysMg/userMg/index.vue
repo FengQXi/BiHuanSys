@@ -10,7 +10,7 @@
                             placeholder="请输入用户昵称"
                             style="width: 180px"
                             prefix-icon="el-icon-search"
-                            v-model="searchdata.nameInput">
+                            v-model="searchdata.userName">
                         </el-input>
                     </div></el-col>
                     <!-- 输入手机号 -->
@@ -20,7 +20,7 @@
                             placeholder="请输入手机号"
                             style="width: 180px"
                             prefix-icon="el-icon-search"
-                            v-model="searchdata.phoneInput">
+                            v-model="searchdata.phonenumber">
                         </el-input>
                     </div></el-col>
                     <el-col :span="7" class="el-col-last-button"><div class="grid-content bg-purple">
@@ -113,11 +113,11 @@
                         <el-pagination
                             @size-change="handleSizeChange"
                             @current-change="handleCurrentChange"
-                            :current-page="tableForm.pageNo"
+                            :current-page="tableForm.page"
                             :page-sizes="[6,8,10,12]"
-                            :page-size="tableForm.pageSize"
+                            :page-size="tableForm.limit"
                             layout="total, sizes, prev, pager, next, jumper"
-                            :total="tableForm.totalCount">
+                            :total="totalCount">
                         </el-pagination>
                     </div>
                     <!-- 修改操作弹出框 -->
@@ -268,11 +268,6 @@
                     children: 'sub',
                     label: 'deptName'
                 },
-                tableForm: {
-                    pageNo:1,       // 默认当前是第一页
-                    pageSize:8,    // 当前每页的数据是10条
-                    totalCount:0    // 总数默认为0
-                },
                 //修改时参数数据
                 centerDialogVisibleUpdate: false,
                 centerDialogVisibleAdd: false,
@@ -305,10 +300,15 @@
                 },
                 //顶部搜索栏数据
                 searchdata:{
-                    nameInput:'',
-                    phoneInput:'',
+                    userName:'',
+                    phonenumber:'',
                     deptId:'',
-                }
+                },
+                tableForm: {
+                    page:1,       // 默认当前是第一页
+                    limit:8,    // 当前每页的数据是10条
+                },
+                totalCount:0    // 总数默认为0
             }
         },
         computed: {
@@ -322,16 +322,16 @@
             personDataShow:{
                 get(){
                     let arr = []
-                    let start = this.tableForm.pageNo - 1
-                    for(let i = 0;i < this.tableForm.pageSize;i++){
-                        if(this.personData[start * this.tableForm.pageSize + i]){
-                            arr[i] = this.personData[start * this.tableForm.pageSize + i]
+                    let start = this.tableForm.page - 1
+                    for(let i = 0;i < this.tableForm.limit;i++){
+                        if(this.personData[start * this.tableForm.limit + i]){
+                            arr[i] = this.personData[start * this.tableForm.limit + i]
                         }
                         else {
                             break
                         }
                     }
-                    this.tableForm.totalCount = this.personData.length
+                    this.totalCount = this.personData.length
                     return arr
                 },
                 set(value){}
@@ -340,17 +340,17 @@
         methods:{
             //侧边栏部门点击事件
             handleNodeClick(sector){
-                this.searchdata.nameInput = ''
-                this.searchdataphoneInput = ''
+                this.searchdata.userName = ''
+                this.searchdata.phonenumber = ''
                 this.searchdata.deptId = sector.deptId
                 this.$store.dispatch('allUser/getAllUserList',this.searchdata)//顶部按钮点击
             },
             //分页器数据
-            handleSizeChange(val) {                 
-                this.tableForm.pageSize = val;      // 修改页的大小
+            handleSizeChange(val) {
+                this.tableForm.limit = val;      // 修改页的大小
             },
             handleCurrentChange(val) {                  
-                this.tableForm.pageNo = val;            // 更新当前的页
+                this.tableForm.page = val;            // 更新当前的页
             },
             //弹出框事件
             updatePersonData(userId){
@@ -428,13 +428,13 @@
             },
             //顶部事件
             clearAllInput(){
-                this.searchdata.idInput = ''
-                this.searchdataphoneInput = ''
-                this.tableForm.pageNo = 1
-                this.tableForm.pageNo = 8
+                this.searchdata.userName = ''
+                this.searchdata.phonenumber = ''
+                this.tableForm.page = 1
+                this.tableForm.limit = 8
                 this.$store.dispatch('allUser/getAllUserList',this.searchdata,this.tableForm)
                 //显示条数的修改
-                //this.tableForm.totalCount = 
+                //this.totalCount = 
             },
             searchByCondition(){
                 this.$store.dispatch('allUser/getAllUserList',this.searchdata)//顶部按钮点击
@@ -450,7 +450,7 @@
         mounted() {
             //传入分页的数据，返回当前页展示的数据
             //this.$store.dispatch('allUser/getAllUserList',this.searchdata,this.tableForm)
-            this.$store.dispatch('allUser/getAllUserList')
+            this.$store.dispatch('allUser/getAllUserList', {...this.searchdata, ...this.tableForm})
         }
     }
 </script>

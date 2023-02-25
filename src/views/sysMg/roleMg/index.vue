@@ -31,23 +31,21 @@
         </div>
 
         <!-- 添加或者修改共用 -->
-        <el-dialog :title="roleInfo.roleId? '修改角色' : '添加角色'" :visible.sync="dialogFormVisible" @close="cancelAdd">
+        <el-dialog :title="roleInfo.roleId ? '修改角色' : '添加角色'" :visible.sync="dialogFormVisible" @close="closeDialog()">
             <el-form label-position="left" :model="roleInfo" label-width="80px">
                 <el-form-item label="角色名">
                     <el-input v-model="roleInfo.roleName" placeholder="请输入角色名"></el-input>
                 </el-form-item>
 
                 <el-form-item v-show="roleInfo.list.length" label="已选权限">
-                    <el-tag style="margin-right: 10px" type="success" closable
-                        v-for="authority in roleInfo.list" :key="authority.menuId"
-                        @close="roleInfo.list.splice(index, 1)">{{ authority.name }}</el-tag>
+                    <el-tag style="margin-right: 10px" type="success" closable v-for="authority in roleInfo.list"
+                        :key="authority.menuId" @close="roleInfo.list.splice(index, 1)">{{ authority.name }}</el-tag>
                 </el-form-item>
 
                 <el-form-item label="未选权限">
                     <el-select :disabled="!roleInfo.roleName" v-model="selectedAuthority" multiple collapse-tags
                         :placeholder="`还有${unSelectedAuthority.length}未选择`">
-                        <el-option v-for="unselect in unSelectedAuthority" :key="unselect.menuId"
-                            :label="unselect.name"
+                        <el-option v-for="unselect in unSelectedAuthority" :key="unselect.menuId" :label="unselect.name"
                             :value="`${unselect.menuId}:${unselect.name}`">
                         </el-option>
                     </el-select>
@@ -59,7 +57,7 @@
 
                 <el-form-item>
                     <el-button type="primary" @click="submit()">保存</el-button>
-                    <el-button @click="cancelAdd">取消</el-button>
+                    <el-button @click="closeDialog()">取消</el-button>
                 </el-form-item>
             </el-form>
         </el-dialog>
@@ -76,7 +74,7 @@ export default {
             isShowTable: true,
             dialogFormVisible: false,
             // allAuthorityList: this.$store.state.roleAndAuthority.allAuthorityList,
-            
+
             roleInfo: {// 收集新增和修改的角色
                 roleId: '',
                 roleName: '',
@@ -116,7 +114,7 @@ export default {
                 const [menuId, name] = element.split(':')
                 // 修改spu对象
                 let newAuthority = {
-                    menuId,
+                    menuId: parseInt(menuId),
                     name,
                 }
                 this.roleInfo.list.push(newAuthority) // 可以数据代理
@@ -125,12 +123,26 @@ export default {
             this.selectedAuthority = [] // 置空 刷新select框
         },
         submit() {
-            this.$store.dispatch('roleAndAuthority/addRole', this.roleInfo)
+            const param = {
+                roleId: this.roleInfo.roleId,
+                roleName: this.roleInfo.roleName,
+                menuIds: this.roleInfo.list.map(item => {
+                    return { menuId: item.menuId }
+                })
+            }
+            // this.roleInfo.list = this.roleInfo.list.map(item => {
+            //     return { menuId: item.menuId }
+            // })
+            if (!this.roleInfo.roleId) {
+                this.$store.dispatch('roleAndAuthority/addRole', param)
+            }
+            else this.$store.dispatch('roleAndAuthority/updateRole', param)
+            this.closeDialog()
         },
         deleteRole(roleId) {
             this.$store.dispatch('roleAndAuthority/deleteRole', roleId)
         },
-        cancelAdd() {
+        closeDialog() {
             this.roleInfo = {
                 roleId: '',
                 roleName: '',
@@ -152,6 +164,4 @@ export default {
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

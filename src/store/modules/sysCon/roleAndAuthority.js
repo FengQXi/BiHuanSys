@@ -1,4 +1,4 @@
-import { reqRoleList, reqAddRole, reqDeleteRole } from '@/api/sysCon/role'
+import { reqRoleList, reqAddRole, reqDeleteRole, reqUpdateRole } from '@/api/sysCon/role'
 
 const getDefaultState = () => {
     return {
@@ -86,7 +86,7 @@ const state = getDefaultState()
 const actions = {
     async getRoleList({ commit }) {
         let result = await reqRoleList()
-        // console.log(result)
+        console.log(result.data)
         if (result.code == 200) {
             commit('SET_ROLELIST', result.data)
         }
@@ -98,6 +98,11 @@ const actions = {
         // if(result.code == 200) {
 
         // }
+    },
+
+    async updateRole({commit}, role)  {
+        let result = await reqUpdateRole(role)
+        console.log(result)
     },
 
     async deleteRole({ commit }, roleId) {

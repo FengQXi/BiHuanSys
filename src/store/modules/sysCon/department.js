@@ -132,9 +132,10 @@ const actions = {
         }
     },
     async addDepart({ commit }, depart) {
-        console.log(depart)
+        // console.log(depart)
         let result = await reqAddDepart(depart)
         // console.log(result)
+        // 没有回显
         // if(result.code == 200) {
         //     // 添加成功之后，修改列表
         //     commit()
@@ -142,7 +143,8 @@ const actions = {
     },
     async deleteDepart({ commit }, deptId) {
         let result = await reqDeleteDepart(deptId)
-        console.log(result)
+        // console.log(result)
+        // 没有回显
         // if(result.code == 200) {
         //     commit()
         // }

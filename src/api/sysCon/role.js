@@ -16,6 +16,14 @@ export const reqAddRole = (role) => {
     })
 }
 
+export const reqUpdateRole = (role) => {
+    return request({
+        url: '/system/role/update',
+        method: 'put',
+        data: role,
+    })
+}
+
 export const reqDeleteRole = (roleId) => {
     return request({
         url: `/system/role/delete/${roleId}`,
