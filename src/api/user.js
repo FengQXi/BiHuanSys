@@ -1,5 +1,7 @@
 import request from '@/utils/request'
 
+// 用户登录的接口
+// 数据为账户和密码
 export function login(data) {
   return request({
     url: '/system/login',
@@ -8,6 +10,7 @@ export function login(data) {
   })
 }
 
+// 获取用户的信息
 export function getInfo(token) {
   return request({
     url: '/system/getUserInfo',
@@ -16,9 +19,11 @@ export function getInfo(token) {
   })
 }
 
-export function logout() {
+// 登出
+export function logout(data) {
   return request({
-    url: '/vue-admin-template/user/logout',
-    method: 'post'
+    url: '/system/logout',
+    method: 'post',
+    data,
   })
 }

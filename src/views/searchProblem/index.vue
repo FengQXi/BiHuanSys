@@ -9,7 +9,7 @@
                     <SearchAside :sectorClick="sectorClick"></SearchAside>
                 </el-aside>
                 <el-main>
-                    <SearchMain :tableData="newTableData" :thePagnation="thePagnation"></SearchMain>
+                    <SearchMain :tableData="allProblemList" :thePagnation="thePagnation" :total="total"></SearchMain>
                 </el-main>
             </el-container>
         </el-container>
@@ -20,26 +20,29 @@
     import SearchMain from './SearchMain.vue';
     import SearchHeader from './SearchHeader.vue';
     import SearchAside from './SearchAside.vue';
+    import { reqProblemList } from "@/api/problemCon/problem"
+import { mapState } from 'vuex';
+
     export default {
         name: 'SearchProblem',
         components:{SearchMain,SearchHeader,SearchAside},
         data() {
             return {
-                tableData:[],
+                // tableData:[],
                 newTableData:[],
                 searchData:{
-                    nameInput:'',
-                    dateInput:'',
-                    deptId:'',
-                    pageNo:1,      
-                    pageSize:8,   
-                    totalCount:0    
-                }
+                    keyWord:'',
+                    createTime:'',
+                    deptName:'',
+                    page:1,
+                    limit:8,
+                    // totalCount:0
+                },
+                // totalCount:0
             }
         },
-        mounted(){
-            this.combiningTableData()
-            this.data()
+        computed:{
+            ...mapState('problem',['allProblemList','total'])
         },
         methods:{
             //整理搜索数据
@@ -54,10 +57,10 @@
                 //         return data.date === dateInput
                 //     })
                 // }
-                this.searchData.nameInput = input.nameInput
-                this.searchData.dateInput = input.dateInput
-                this.searchData.pageNo = 1
-                this.searchData.pageSize = 8
+                this.searchData.keyWord = input.nameInput
+                this.searchData.createTime = input.dateInput
+                this.searchData.page = 1
+                this.searchData.limit = 8
             },
             sectorClick(data){
                 //需要请求数据，更新tableData 
@@ -74,36 +77,45 @@
                 //         return data.department.label === label
                 //     })
                 // }
-                this.searchData.nameInput = ''
-                this.searchData.dateInput = ''
+                this.searchData.keyWord = ''
+                this.searchData.createTime = ''
                 this.searchData.pageNo = 1
                 this.searchData.pageSize = 8
-                this.searchData.deptId = data.deptId
+                this.searchData.deptName = data.deptName
+                this.$store.dispatch('problem/getProblemList', this.searchData)
             },
             thePagnation(data){
-                this.searchData.pageNo = data.pageNo
-                this.searchData.pageSize = data.pageSize
+                this.searchData.page = data.pageNo
+                this.searchData.limit = data.pageSize
+                this.$store.dispatch('problem/getProblemList', this.searchData)
             },
             updateTableData(){
                 //请求数据,更新tableData
                 this.searchData = {
-                    nameInput:'',
-                    dateInput:'',
-                    deptId:''
+                    keyWord:'',
+                    createTime:'',
+                    deptName:''
                 }
-                this.$store.dispatch('problem/getProblem',this.searchData)
+                // this.$store.dispatch('problem/getProblem',this.searchData)
             },
             //请求数据:数据包含状态码为1、2、3
             requestData(){
-                this.$store.dispatch('problem/getProblem',this.searchData)
+                // this.$store.dispatch('problem/getProblem',this.searchData)
             },
             combiningTableData(){
-                this.tableData = [...this.$store.state.problem.pendingSolveList,...this.$store.state.problem.pendingCheckList,...this.$store.state.problem.completedList]
+                // this.tableData = [...this.$store.state.problem.pendingSolveList,...this.$store.state.problem.pendingCheckList,...this.$store.state.problem.completedList]
             },
             data(){
                 this.newTableData = this.tableData
             },
-        }
+        },
+        mounted(){
+            // this.combiningTableData()
+            // this.data()
+            // console.log(this.searchData, "))")
+            // let result = await reqProblemList(this.searchData)
+            this.$store.dispatch('problem/getProblemList', this.searchData)
+        },
     }
 </script>
 

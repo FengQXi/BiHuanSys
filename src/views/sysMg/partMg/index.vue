@@ -22,10 +22,12 @@
 
             <el-table-column label="操作" align="right">
                 <template slot-scope="{row, $index}">
-                    <el-button v-if="!row.parentId" size="mini" type="primary"
-                        @click="toAddDepart(row)">添加下级部门</el-button>
+                    <el-button v-if="!row.parentId" size="mini" type="primary" @click="toAddDepart(row)" style="margin-right: 20px">添加下级部门</el-button>
 
-                    <el-button size="mini" type="danger" @click="deleteDepart(row)">删除</el-button>
+                    <el-popconfirm :title="`确定删除(${row.deptName})吗？`" @onConfirm="deleteDepart(row)">
+                        <el-button size="mini" type="danger" slot="reference">删除</el-button>
+                    </el-popconfirm>
+                    <!-- <el-button size="mini" type="danger" @click="deleteDepart(row)">删除</el-button> -->
                 </template>
             </el-table-column>
 
@@ -89,7 +91,7 @@ export default {
     },
     mounted() {
         //获取所有部门信息
-        this.$store.dispatch('department/getDepartList')
+        // this.$store.dispatch('department/getDepartList')
     },
 }
 </script>

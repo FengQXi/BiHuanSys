@@ -93,7 +93,7 @@
                             <el-form-item label="归属部门" prop="deptName">
                                 <!-- <el-input v-model="ruleForm.sector"></el-input> -->
                                 <el-select v-model="ruleForm.deptId" placeholder="请选择部门">
-                                    <el-option v-for="item in departmentList" :key="item.deptId" :label="item.deptName"
+                                    <el-option v-for="item in allDepartList" :key="item.deptId" :label="item.deptName"
                                         :value="item.deptId">
                                     </el-option>
                                 </el-select>
@@ -151,7 +151,7 @@
                                     </el-option>
                                 </el-select> -->
                                 <el-select v-model="ruleForm.deptId" placeholder="请选择部门">
-                                    <el-option v-for="item in departmentList" :key="item.deptId" :label="item.deptName"
+                                    <el-option v-for="item in allDepartList" :key="item.deptId" :label="item.deptName"
                                         :value="item.deptId">
                                     </el-option>
                                 </el-select>
@@ -195,7 +195,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 
 export default {
     name: 'UserManagement',
@@ -252,6 +252,9 @@ export default {
         ...mapState('department', ['departmentList']),
         ...mapState('allUser', ['allUserList', 'totalCount']),
         ...mapState('roleAndAuthority', ['roleList']),
+
+        ...mapGetters('department', ['allDepartList']),
+
         personData() {
             // 深拷贝
             return JSON.parse(JSON.stringify(this.allUserList))
@@ -316,11 +319,11 @@ export default {
 
                     if (this.ruleForm.userId) {
                         this.$store.dispatch('allUser/updateUser', this.ruleForm)
-                        this.clearAllInput()
+                        this.clearAllInput() // 这里面有请求列表
                     }
                     else {
-                        his.$store.dispatch('allUser/addUser', this.ruleForm)
-                        this.clearAllInput()
+                        this.$store.dispatch('allUser/addUser', this.ruleForm)
+                        this.clearAllInput() // 这里面有请求列表
                     }
                 } else {
                     console.log('error submit!!');
@@ -353,7 +356,7 @@ export default {
                 type: 'warning'
             }).then(() => {
                 //发起删除用户请求，更新personDataShow
-                const flag = this.$store.dispatch('allUser/deleteUser', row.userId)
+                this.$store.dispatch('allUser/deleteUser', row.userId)
                 this.$message({
                     type: 'success',
                     message: '删除成功!',

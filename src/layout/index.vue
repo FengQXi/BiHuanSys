@@ -46,6 +46,10 @@ export default {
     handleClickOutside() {
       this.$store.dispatch('app/closeSideBar', { withoutAnimation: false })
     }
+  },
+  mounted() {
+    this.$store.dispatch('department/getDepartList')
+    this.$store.dispatch('roleAndAuthority/getRoleList')
   }
 }
 </script>

@@ -128,20 +128,20 @@ export const readFile = (file) => {
 }
 //字段对应表
 export let character = {
-  id: {
-    text: "Id",
-    type: 'string'
-  },
-  entryTime: {
-    text: "录入时间",
-    type: 'string'
-  },
-  name: {
+  // solveId: {
+  //   text: "Id",
+  //   type: 'string'
+  // },
+  keyWord: {
     text: "问题名称",
     type: 'string'
   },
-  describe: {
+  quesDesc: {
     text: "问题描述",
+    type: 'string'
+  },
+  createTime: {
+    text: "录入时间",
     type: 'string'
   },
   category: {
@@ -156,28 +156,40 @@ export let character = {
     text: "检查级别",
     type: 'string'
   },
-  degree: {
+  seriousLevel: {
     text: "问题程度",
     type: 'string'
   },
-  departmentId: {
-    text: "负责部门Id",
-    type: 'string'
-  },
-  departmentLable: {
+  // departmentId: {
+  //   text: "负责部门Id",
+  //   type: 'string'
+  // },
+  quesDept: {
     text: "负责部门",
     type: 'string'
   },
-  responsePersonId: {
+  solveId: {
     text: "负责人Id",
     type: 'string'
   },
-  responsePersonName: {
-    text: "负责人",
-    type: 'string'
-  },
-  limitTime: {
+  // solveId: {
+  //   text: "负责人",
+  //   type: 'string'
+  // },
+  overtime: {
     text: "整改限期",
     type: 'string'
   },
+  probelmState:{
+    text: "状态",
+    type: 'string'
+  },
+  checkId:{
+    text: "录入人",
+    type: 'int'
+  },
+  sloveMethod:{
+    text: "整改措施",
+    type: 'string'
+  }
 }

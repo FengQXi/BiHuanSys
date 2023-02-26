@@ -89,25 +89,36 @@ const actions = {
         console.log(result.data)
         if (result.code == 200) {
             commit('SET_ROLELIST', result.data)
+            return
         }
     },
 
     async addRole({ commit }, role) {
         let result = await reqAddRole(role)
-        console.log(result);
-        // if(result.code == 200) {
-
-        // }
+        // console.log(result);
+        // return
+        if(result.code == 200) {
+            commit('SET_ROLELIST', result.data)
+            return 'ok'
+        }
     },
 
     async updateRole({commit}, role)  {
         let result = await reqUpdateRole(role)
         console.log(result)
+        if(result.code == 200) {
+            commit('SET_ROLELIST', result.data)
+            return 'ok'
+        }
     },
 
     async deleteRole({ commit }, roleId) {
         let result = await reqDeleteRole(roleId)
         console.log(result)
+        if(result.code == 200) {
+            commit('SET_ROLELIST', result.data)
+            return 'ok'
+        }
     }
 }
 

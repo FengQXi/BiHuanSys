@@ -35,6 +35,9 @@ const mutations = {
     SET_FINALROUTES: (state, routes) => {
         state.finalRoutes = routes
     },
+    SET_AVATAR: (state, avatar) => {
+        state.avatar = avatar
+    }
 }
 
 const actions = {
@@ -74,6 +77,7 @@ const actions = {
             commit('SET_NAME', result.data.nickName)
             commit('SET_ROUTES', result.data.menuList)
             commit('SET_FINALROUTES', calculateRoutes(result.data.menuList))
+            if(result.data.userType) commit('SET_AVATAR', result.data.userType)
             // 路由器中添加路由
             router.addRoutes(state.finalRoutes)
             // console.log(router, "@@")

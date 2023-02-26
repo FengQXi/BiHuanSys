@@ -1,16 +1,16 @@
 <template>
     <div style="height: 540px;">
         <el-table
-            :data="tableDataShow"
+            :data="tableData"
             style="width: 100% "
             max-height="490px">
             <el-table-column
-                prop="entryTime"
+                prop="createTime"
                 label="问题录入时间"
                 align="center">
             </el-table-column>
             <el-table-column
-                prop="name"
+                prop="keyWord"
                 label="检查名称"
                 align="center">
             </el-table-column>
@@ -26,12 +26,12 @@
                 align="center">
             </el-table-column>
             <el-table-column
-                prop="department.label"
+                prop="quesDept"
                 label="问题产生部门"
                 align="center">
             </el-table-column>
             <el-table-column
-                prop="responsePerson.name"
+                prop="solveId"
                 label="整改责任人"
                 width="100"
                 align="center">
@@ -46,14 +46,15 @@
                 </template>
             </el-table-column>
             <el-table-column
-                prop="status"
+                prop="problemState"
                 label="状态"
                 width="100"
                 align="center">
                 <template slot-scope="scope">
-                    <span v-if="scope.row.status == '1'" class="spanIsNo">处理中</span>
-                    <span v-else-if="scope.row.status == '2'" class="spanIsIng">待审核</span>
-                    <span v-else-if="scope.row.status == '3'" class="spanIsOk">已闭环</span>
+                    <span v-if="scope.row.problemState == '1'" class="spanIsNo">处理中</span>
+                    <span v-else-if="scope.row.problemState == '2'" class="spanIsIng">待审核</span>
+                    <span v-else-if="scope.row.problemState == '0'" class="spanIsCommit">待提交</span>
+                    <span v-else-if="scope.row.problemState == '3'" class="spanIsOk">已闭环</span>
                 </template>
             </el-table-column>
         </el-table>
@@ -65,7 +66,7 @@
                 :page-sizes="[8,10,12,14]"
                 :page-size="tableForm.pageSize"
                 layout="total, sizes, prev, pager, next, jumper"
-                :total="tableForm.totalCount">
+                :total="total">
             </el-pagination>
         </div>
     </div>
@@ -74,14 +75,13 @@
 <script>
     export default {
         name:'SearchMain',
-        props:['tableData','thePagnation'],
+        props:['tableData','thePagnation','total'],
         data() {
             return {
                 tableDataShow: [],
                 tableForm: {
                     pageNo:1,       // 默认当前是第一页
                     pageSize:8,    // 当前每页的数据是10条
-                    totalCount:0    // 总数默认为0
                 } 
             }
         },
@@ -91,7 +91,7 @@
         },
         methods: {
             getCount(){       
-                this.tableForm.totalCount = this.tableData.length
+                this.otalCount = this.tableData.length
             },
             getList(){
                 // this.tableDataShow = []
@@ -126,7 +126,7 @@
                 deep:true,
                 handler(){
                     this.getList();
-                    this.tableForm.totalCount = this.tableData.length
+                    this.totalCount = this.tableData.length
                 }
             }
         }
@@ -142,6 +142,9 @@
     }
     .spanIsNo{
         color: #fb384b;
+    }
+    .spanIsCommit{
+        color: #dfe570;
     }
 
     .el-pagination {

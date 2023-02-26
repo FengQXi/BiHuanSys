@@ -342,19 +342,32 @@ const actions = {
         if (result.code == 200) {
             commit('SET_USERLIST', result.data.records)
             commit('SET_TOTAL', result.data.total)
+            return
         }
     },
 
     async addUser({commit}, param) {
         let result = await reqAddUser(param)
+        // console.log(result)
+        if(result.code == 200) {
+            return 'ok'
+        }
     },
 
     async updateUser({commit}, param) {
         let result = await reqUpdateUser(param)
+        // console.log(result)
+        if(result.code == 200) {
+            return 'ok'
+        }
     },
 
     async deleteUser({commit}, userId) {
         let result = await reqDeleteUser(userId)
+        // console.log(result)
+        if(result.code == 200) {
+            return 'ok'
+        }
     }
 }
 

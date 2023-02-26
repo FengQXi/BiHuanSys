@@ -15,10 +15,7 @@
                             <template slot-scope="scope">
                                 <div>
                                     <div v-for="(item, index) in scope.row.data" :key="index" class="text item">
-                                        <el-switch 
-                                            v-model="item.flag" 
-                                            active-color="#13ce66" 
-                                            inactive-color="#ff4949" >
+                                        <el-switch v-model="item.flag" active-color="#13ce66" inactive-color="#ff4949">
                                         </el-switch>{{ item.name }}
                                     </div>
                                 </div>
@@ -50,8 +47,8 @@ export default {
     },
     computed: {
         // allDepartmentList 暂缓
-        ...mapState('template',['categoryList', 'causeList', 'levelList', 'degreeList', 'allDepartmentList']),
-        fileColumData(){
+        ...mapState('template', ['categoryList', 'causeList', 'levelList', 'degreeList', 'allDepartmentList']),
+        fileColumData() {
             return [{
                 id: '问题类别',
                 data: this.categoryList
@@ -64,124 +61,133 @@ export default {
             }, {
                 id: '问题程度',
                 data: this.degreeList
-            }, {
-                id: '负责部门',
-                data: this.allDepartmentList
-            }]
+            },
+                // {
+                //     id: '负责部门',
+                //     data: this.allDepartmentList
+                // }
+            ]
         }
     },
     methods: {
         //excel表格数据验证
         getCellData(sheet1) {
             //数据验证：问题类别
-            sheet1.getCell('E2').dataValidation = {
+            sheet1.getCell('C2').dataValidation = {
                 type: "list",
                 allowBlank: true,
                 formulae: this.categoryFileList,
             };
-            sheet1.getCell('E3').dataValidation = {
+            sheet1.getCell('C3').dataValidation = {
                 type: "list",
                 allowBlank: true,
                 formulae: this.categoryFileList,
             };
-            sheet1.getCell('E4').dataValidation = {
+            sheet1.getCell('C4').dataValidation = {
                 type: "list",
                 allowBlank: true,
                 formulae: this.categoryFileList,
             };
-            sheet1.getCell('E5').dataValidation = {
+            sheet1.getCell('C5').dataValidation = {
                 type: "list",
                 allowBlank: true,
                 formulae: this.categoryFileList,
             };
             //数据验证：产生原因
-            sheet1.getCell("F2").dataValidation = {
+            sheet1.getCell("D2").dataValidation = {
                 type: "list",
                 allowBlank: true,
                 formulae: this.causeFileList,
             };
-            sheet1.getCell("F3").dataValidation = {
+            sheet1.getCell("D3").dataValidation = {
                 type: "list",
                 allowBlank: true,
                 formulae: this.causeFileList,
             };
-            sheet1.getCell("F4").dataValidation = {
+            sheet1.getCell("D4").dataValidation = {
                 type: "list",
                 allowBlank: true,
                 formulae: this.causeFileList,
             };
-            sheet1.getCell("F5").dataValidation = {
+            sheet1.getCell("D5").dataValidation = {
                 type: "list",
                 allowBlank: true,
                 formulae: this.causeFileList,
             };
             //数据验证：检查级别
-            sheet1.getCell("G2").dataValidation = {
+            sheet1.getCell("E2").dataValidation = {
                 type: "list",
                 allowBlank: true,
                 formulae: this.levelFileList,
             };
-            sheet1.getCell("G3").dataValidation = {
+            sheet1.getCell("E3").dataValidation = {
                 type: "list",
                 allowBlank: true,
                 formulae: this.levelFileList,
             };
-            sheet1.getCell("G4").dataValidation = {
+            sheet1.getCell("E4").dataValidation = {
                 type: "list",
                 allowBlank: true,
                 formulae: this.levelFileList,
             };
-            sheet1.getCell("G5").dataValidation = {
+            sheet1.getCell("E5").dataValidation = {
                 type: "list",
                 allowBlank: true,
                 formulae: this.levelFileList,
             };
             //数据验证：问题程度
-            sheet1.getCell("H2").dataValidation = {
+            sheet1.getCell("F2").dataValidation = {
                 type: "list",
                 allowBlank: true,
                 formulae: this.degreeFileList,
             };
-            sheet1.getCell("H3").dataValidation = {
+            sheet1.getCell("F3").dataValidation = {
                 type: "list",
                 allowBlank: true,
                 formulae: this.degreeFileList,
             };
-            sheet1.getCell("H4").dataValidation = {
+            sheet1.getCell("F4").dataValidation = {
                 type: "list",
                 allowBlank: true,
                 formulae: this.degreeFileList,
             };
-            sheet1.getCell("H5").dataValidation = {
+            sheet1.getCell("F5").dataValidation = {
                 type: "list",
                 allowBlank: true,
                 formulae: this.degreeFileList,
             };
             //数据验证：负责部门
-            sheet1.getCell("J2").dataValidation = {
+            sheet1.getCell("G2").dataValidation = {
                 type: "list",
                 allowBlank: true,
                 formulae: this.departmentLabelFileList,
             };
-            sheet1.getCell("J3").dataValidation = {
+            sheet1.getCell("G3").dataValidation = {
                 type: "list",
                 allowBlank: true,
                 formulae: this.departmentLabelFileList,
             };
-            sheet1.getCell("J4").dataValidation = {
+            sheet1.getCell("G4").dataValidation = {
                 type: "list",
                 allowBlank: true,
                 formulae: this.departmentLabelFileList,
             };
-            sheet1.getCell("J5").dataValidation = {
+            sheet1.getCell("G5").dataValidation = {
                 type: "list",
                 allowBlank: true,
                 formulae: this.departmentLabelFileList,
             };
         },
         exportExcel(arr) {
+            // let optionExcel = '"'
+            // this.allDepartmentList.forEach(item => {
+            //     optionExcel = optionExcel + item.deptName + ','
+            // })
+            // optionExcel = optionExcel + '"'
+            // this.departmentLabelFileList = []
+            // this.departmentLabelFileList.push(optionExcel)
             //校验数据生成
-            arr.forEach(value=>{
+            arr.forEach(value => {
                 this.theListFnished(value)
             })
             // 创建工作簿
@@ -191,19 +197,20 @@ export default {
 
             //设置表头
             sheet1.columns = [
-                { header: "Id", key: "id", width: 15 },
-                { header: "录入时间", key: "entryTime", width: 15 },
-                { header: "问题名称", key: "name", width: 15 },
-                { header: "问题描述", key: "describe", width: 15 },
+                // { header: "用户Id", key: "solveId", width: 15 },
+                // { header: "录入时间", key: "createTime", width: 15 },
+                { header: "问题名称", key: "keyWord", width: 15 },
+                { header: "问题描述", key: "quesDesc", width: 15 },
                 { header: "问题类别", key: "category", width: 15 },
                 { header: "产生原因", key: "cause", width: 15 },
                 { header: "检查级别", key: "level", width: 15 },
-                { header: "问题程度", key: "degree", width: 15 },
-                { header: "负责部门Id", key: "departmentId", width: 15 },
-                { header: "负责部门", key: "departmentLabel", width: 15 },
-                { header: "负责人Id", key: "responsePersonId", width: 15 },
-                { header: "负责人", key: "responsePersonName", width: 15 },
-                { header: "整改限期", key: "limitTime", width: 15 },
+                { header: "问题程度", key: "seriousLevel", width: 15 },
+                // { header: "负责部门Id", key: "departmentId", width: 15 },
+                { header: "负责部门", key: "quesDept", width: 15 },
+                { header: "负责人Id", key: "solveId", width: 15 },
+                // { header: "负责人", key: "responsePersonName", width: 15 },
+                { header: "整改限期", key: "overtime", width: 15 },
+                { header: "整改措施", key: "solveMethod", width: 15 },
             ];
             this.getCellData(sheet1)
 
@@ -216,62 +223,73 @@ export default {
             });
         },
         //模板数据验证字典项选择
-        theListFnished(value){
+        theListFnished(value) {
             let optionExcel = '"'
-            if(value.id == '问题类别'){
-                value.data.forEach(item =>{
-                    if(item.flag) {
-                        optionExcel=optionExcel+item.name+','
+            if (value.id == '问题类别') {
+                value.data.forEach(item => {
+                    if (item.flag) {
+                        optionExcel = optionExcel + item.name + ','
                     }
-                       
+
                 })
-                optionExcel = optionExcel+'"'
+                optionExcel = optionExcel + '"'
                 this.categoryFileList = []
                 this.categoryFileList.push(optionExcel)
             }
-            else if(value.id == '产生原因'){
-                value.data.forEach(item =>{
-                    if(item.flag) {
-                        optionExcel=optionExcel+item.name+','
+            else if (value.id == '产生原因') {
+                value.data.forEach(item => {
+                    if (item.flag) {
+                        optionExcel = optionExcel + item.name + ','
                     }
-                       
+
                 })
-                optionExcel = optionExcel+'"'
+                optionExcel = optionExcel + '"'
                 this.causeFileList = []
-                this.causeFileList.push(optionExcel) 
+                this.causeFileList.push(optionExcel)
             }
-            else if(value.id == '检查级别'){
-                value.data.forEach(item =>{
-                    if(item.flag) {
-                        optionExcel=optionExcel+item.name+','
+            else if (value.id == '检查级别') {
+                value.data.forEach(item => {
+                    if (item.flag) {
+                        optionExcel = optionExcel + item.name + ','
                     }
-                       
+
                 })
-                optionExcel = optionExcel+'"'
+                optionExcel = optionExcel + '"'
                 this.levelFileList = []
-                this.levelFileList.push(optionExcel) 
+                this.levelFileList.push(optionExcel)
             }
-            else if(value.id == '问题程度'){
-                value.data.forEach(item =>{
-                    if(item.flag) {
-                        optionExcel=optionExcel+item.name+','
+            // else if(value.id == '问题程度'){
+            //     value.data.forEach(item =>{
+            //         if(item.flag) {
+            //             optionExcel=optionExcel+item.name+','
+            //         }
+
+            //     })
+            //     optionExcel = optionExcel+'"'
+            //     this.degreeFileList = []
+            //     this.degreeFileList.push(optionExcel) 
+            // }
+            // else{
+            //     allDepartmentList.forEach(item =>{
+            //         // if(item.flag) {
+            //         //     optionExcel=optionExcel+item.name+','
+            //         // }
+            //         optionExcel=optionExcel+item.deptName+','
+            //     })
+            //     optionExcel = optionExcel+'"'
+            //     this.departmentLabelFileList = []
+            //     this.departmentLabelFileList.push(optionExcel) 
+            // }
+            else {
+                value.data.forEach(item => {
+                    if (item.flag) {
+                        optionExcel = optionExcel + item.name + ','
                     }
-                       
+
                 })
-                optionExcel = optionExcel+'"'
+                optionExcel = optionExcel + '"'
                 this.degreeFileList = []
-                this.degreeFileList.push(optionExcel) 
-            }
-            else{
-                value.data.forEach(item =>{
-                    if(item.flag) {
-                        optionExcel=optionExcel+item.name+','
-                    }
-                       
-                })
-                optionExcel = optionExcel+'"'
-                this.departmentLabelFileList = []
-                this.departmentLabelFileList.push(optionExcel) 
+                this.degreeFileList.push(optionExcel)
             }
         }
     },

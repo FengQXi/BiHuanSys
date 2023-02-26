@@ -129,6 +129,7 @@ const actions = {
         // console.log(result)
         if (result.code == 200) {
             commit('SET_DEPART', result.data)
+            return 'ok'
         }
     },
     async addDepart({ commit }, depart) {
@@ -136,18 +137,19 @@ const actions = {
         let result = await reqAddDepart(depart)
         // console.log(result)
         // 没有回显
-        // if(result.code == 200) {
-        //     // 添加成功之后，修改列表
-        //     commit()
-        // }
+        if(result.code == 200) {
+            // 添加成功之后，修改列表
+            commit('SET_DEPART', result.data)
+            return 'ok'
+        }
     },
     async deleteDepart({ commit }, deptId) {
         let result = await reqDeleteDepart(deptId)
         // console.log(result)
-        // 没有回显
-        // if(result.code == 200) {
-        //     commit()
-        // }
+        if(result.code == 200) {
+            commit('SET_DEPART', result.data)
+            return 'ok'
+        }
     }
 }
 
@@ -157,9 +159,36 @@ const mutations = {
     }
 }
 
+
+const getters = {
+    allDepartList(state) {
+        const tempList = []
+        state.departmentList.forEach(item => {
+            const dept = {
+                deptId: item.deptId,
+                deptName: item.deptName,
+            }
+            tempList.push(dept)
+
+            if (item.sub !== null) {
+                item.sub.forEach(item0 => {
+                    const dept0 = {
+                        deptId: item0.deptId,
+                        deptName: item0.deptName,
+                    }
+                    tempList.push(dept0)
+                })
+            }
+        })
+        return tempList
+    }
+}
+
+
 export default {
     namespaced: true,
     state,
     mutations,
-    actions
+    actions,
+    getters,
 }

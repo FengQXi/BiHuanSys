@@ -126,21 +126,33 @@ export default {
             const param = {
                 roleId: this.roleInfo.roleId,
                 roleName: this.roleInfo.roleName,
-                menuIds: this.roleInfo.list.map(item => {
-                    return { menuId: item.menuId }
-                })
+                menuId: [],
+                // menuId: this.roleInfo.list.map(item => {
+                //     return { item.menuId }
+                // })
             }
+            this.roleInfo.list.forEach(item => {
+                param.menuId.push(item.menuId)
+            })
             // this.roleInfo.list = this.roleInfo.list.map(item => {
             //     return { menuId: item.menuId }
             // })
             if (!this.roleInfo.roleId) {
                 this.$store.dispatch('roleAndAuthority/addRole', param)
+                // 回显
+                this.$store.dispatch('roleAndAuthority/getRoleList')
             }
-            else this.$store.dispatch('roleAndAuthority/updateRole', param)
+            else{
+                this.$store.dispatch('roleAndAuthority/updateRole', param)
+                // 回显
+                this.$store.dispatch('roleAndAuthority/getRoleList')
+            }
             this.closeDialog()
         },
         deleteRole(roleId) {
             this.$store.dispatch('roleAndAuthority/deleteRole', roleId)
+            // 回显
+            this.$store.dispatch('roleAndAuthority/getRoleList')
         },
         closeDialog() {
             this.roleInfo = {
@@ -159,7 +171,7 @@ export default {
     },
     mounted() {
         // 获取全部角色
-        this.$store.dispatch('roleAndAuthority/getRoleList')
+        // this.$store.dispatch('roleAndAuthority/getRoleList')
     }
 }
 </script>
