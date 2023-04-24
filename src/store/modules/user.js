@@ -45,16 +45,22 @@ const actions = {
     async login({ commit }, userInfo) {
         const userName = userInfo.username
         const password = userInfo.password
-        let result = await login({userName: userName.trim(), password: password})
+        const code = userInfo.code
+        let {res, err} = await login({
+            userName: userName.trim(),
+            password: password,
+            code: code
+        })
+        console.log(err);
         // console.log(result)
-        if(result.code == 200) {
-            // console.log(result.data.token)
-            commit('SET_TOKEN', result.data.token)
-            setToken(result.data.token)
+        if(res.code == 200) {
+            // console.log(res.data.token)
+            commit('SET_TOKEN', res.data.token)
+            setToken(res.data.token)
             return 'ok'
         }
         else {
-            return Promise.reject(new Error(result.message))
+            return Promise.reject(new Error(res.message))
         }
         // 不用这种
         // return new Promise((resolve, reject) => {

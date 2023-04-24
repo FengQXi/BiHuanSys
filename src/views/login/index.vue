@@ -38,7 +38,7 @@
             </el-form-item>
 
             <div class="codeItem">
-                <img v-show="codeBase64" :src="'data:image/jpeg;base64' + codeBase64">
+                <img v-show="codeBase64" :src="'data:image/jpg;base64,' + codeBase64">
             </div>
 
             <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;"
