@@ -38,7 +38,7 @@
             </el-form-item>
 
             <div class="codeItem">
-                <img v-show="loginForm.code" :src="'data:image/jpeg;base64' + loginForm.code">
+                <img v-show="codeBase64" :src="'data:image/jpeg;base64' + codeBase64">
             </div>
 
             <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;"
@@ -86,7 +86,8 @@ export default {
             },
             loading: false,
             passwordType: 'password',
-            redirect: undefined
+            redirect: undefined,
+            codeBase64: ""
         }
     },
     watch: {
@@ -130,7 +131,7 @@ export default {
                 let result = await reqCode(this.loginForm.username)
                 console.log(result);
                 if(result.code == 200) {
-                    this.loginForm.code = result.data
+                    this.codeBase64 = result.data
                     this.$message({
                         type: "success",
                         message: "获取成功",
