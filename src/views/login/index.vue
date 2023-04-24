@@ -27,6 +27,20 @@
                 </span>
             </el-form-item>
 
+            <el-form-item prop="code">
+                <span class="svg-container">
+                    <i class="el-icon-paperclip"></i>
+                </span>
+                <el-input v-model="loginForm.code" placeholder="Code"></el-input>
+                <span class="show-pwd" title="获取验证码" @click="getCode()">
+                    <i class="el-icon-search"></i>
+                </span>
+            </el-form-item>
+
+            <div class="codeItem">
+                <img v-show="loginForm.code" :src="'data:image/jpeg;base64' + loginForm.code">
+            </div>
+
             <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;"
                 @click.native.prevent="handleLogin">Login</el-button>
 
@@ -41,6 +55,7 @@
 
 <script>
 import { validUsername } from '@/utils/validate'
+import { reqCode } from '@/api/user'
 
 export default {
     name: 'Login',
@@ -61,8 +76,9 @@ export default {
         }
         return {
             loginForm: {
-                username: 'admin',
-                password: '123456'
+                username: '',
+                password: '',
+                code: '',
             },
             loginRules: {
                 username: [{ required: true, trigger: 'blur', validator: validateUsername }],
@@ -108,6 +124,18 @@ export default {
                     return false
                 }
             })
+        },
+        async getCode() {
+            if(this.loginForm.username != '') {
+                let result = await reqCode(this.loginForm.username)
+                console.log(result);
+            }
+            else {
+                this.$message({
+                    type: 'warning',
+                    message: '请输入用户名',
+                })
+            }
         }
     }
 }
@@ -221,5 +249,18 @@ $light_gray: #eee;
         cursor: pointer;
         user-select: none;
     }
+}
+</style>
+
+<style scoped>
+.codeItem {
+    height: 48px;
+    width: 150px;
+    margin: 0px auto;
+    margin-bottom: 5px;
+}
+.codeItem img {
+    width: 100%;
+    height: 100%;
 }
 </style>
