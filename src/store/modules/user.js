@@ -46,12 +46,11 @@ const actions = {
         const userName = userInfo.username
         const password = userInfo.password
         const code = userInfo.code
-        let {res, err} = await login({
+        let res = await login({
             userName: userName.trim(),
             password: password,
             code: code
         })
-        console.log(err);
         // console.log(result)
         if(res.code == 200) {
             // console.log(res.data.token)
