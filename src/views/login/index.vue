@@ -129,6 +129,13 @@ export default {
             if(this.loginForm.username != '') {
                 let result = await reqCode(this.loginForm.username)
                 console.log(result);
+                if(result.code == 200) {
+                    this.loginForm.code = result.data
+                    this.$message({
+                        type: "success",
+                        message: "获取成功",
+                    })
+                }
             }
             else {
                 this.$message({
