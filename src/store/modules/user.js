@@ -1,5 +1,5 @@
 import { login, logout, getInfo } from '@/api/user'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import { getToken, setToken, removeToken, setUserId, getUserId } from '@/utils/auth'
 import { resetRouter, constantRoutes, asyncRoutes, anyRoutes } from '@/router'
 import { getAsyncRoutes } from '@/router'
 import router from '@/router'
@@ -56,6 +56,7 @@ const actions = {
             // console.log(res.data.token)
             commit('SET_TOKEN', res.data.token)
             setToken(res.data.token)
+            setUserId(res.data.id)
             return 'ok'
         }
         else {
@@ -76,7 +77,7 @@ const actions = {
 
     // get user info
     async getInfo({ commit, state }) {
-        let result = await getInfo(state.token)
+        let result = await getInfo(getUserId())
         // console.log(result)
         if(result.code == 200) {
             commit('SET_NAME', result.data.nickName)
