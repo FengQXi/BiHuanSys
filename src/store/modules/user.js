@@ -51,11 +51,12 @@ const actions = {
             password: password,
             code: code
         })
-        // console.log(result)
+        console.log(res)
         if(res.code == 200) {
             // console.log(res.data.token)
             commit('SET_TOKEN', res.data.token)
             setToken(res.data.token)
+            console.log(res.data.id);
             setUserId(res.data.id)
             return 'ok'
         }

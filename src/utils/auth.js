@@ -15,10 +15,10 @@ export function removeToken() {
 }
 
 export function setUserId(id) {
-    return Cookies.set(UserId, id)
+    return Cookies.set("UserId", id)
 }
 
 export function getUserId() {
-    return Cookies.get(UserId)
+    return Cookies.get("UserId")
 }
 

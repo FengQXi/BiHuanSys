@@ -185,6 +185,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import { getUserId } from '@/utils/auth'
 
 export default {
     name: 'ProblemSolve',
@@ -331,13 +332,13 @@ export default {
     },
     mounted() {
         this.$store.dispatch('problem/getPendingSolve', {
-            checkId: parseInt(this.$store.state.user.token)
+            checkId: parseInt(getUserId())
         })
         this.$store.dispatch('problem/getPendingCheck', {
-            checkId: parseInt(this.$store.state.user.token)
+            checkId: parseInt(getUserId())
         })
         this.$store.dispatch('problem/getCompletedList', {
-            checkId: parseInt(this.$store.state.user.token)
+            checkId: parseInt(getUserId())
         })
     }
 }

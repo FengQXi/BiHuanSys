@@ -172,6 +172,7 @@ import { readFile, character } from '@/utils/index'
 import * as XLSX from 'xlsx'
 import { mapGetters, mapState } from 'vuex'
 import { reqUserByDept } from '@/api/sysCon/allUser'
+import { getUserId } from '@/utils/auth'
 
 export default {
     name: 'ProblemEntry',
@@ -440,7 +441,7 @@ export default {
     },
     mounted() {
         this.$store.dispatch('problem/get0ProblemList', {
-            checkId: parseInt(this.$store.state.user.token)
+            checkId: parseInt(getUserId())
         })
     }
 }

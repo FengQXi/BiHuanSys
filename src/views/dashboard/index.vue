@@ -69,23 +69,23 @@ export default {
                 let status = result.data.state
 
                 let pCD = []
-                for (key in dept) {
+                for (let key in dept) {
                     pCD.push({
-                        name: key,
-                        value: dept.key
+                        "name": key,
+                        "value": dept[key]
                     })
                 }
                 this.peiChartData = pCD // 饼状图数据
 
                 let bCL = []
                 let bCD = []
-                for (key in status) {
+                for (let key in status) {
                     bCL.push(key)
-                    bCD.push(status.key)
+                    bCD.push(status[key])
                 }
                 this.barChartLabel = bCL
                 this.barChartData = bCD // 条形图数据
-
+                
                 this.initCharts()
             }
             else this.initCharts() // 在没有网络的情况下展示一些死数据
