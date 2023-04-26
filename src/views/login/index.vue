@@ -129,7 +129,7 @@ export default {
         async getCode() {
             if(this.loginForm.username != '') {
                 let result = await reqCode(this.loginForm.username)
-                console.log(result);
+                // console.log(result);
                 if(result.code == 200) {
                     this.codeBase64 = result.data
                     this.$message({

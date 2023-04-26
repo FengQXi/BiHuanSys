@@ -64,12 +64,12 @@ export default {
         async getChartData() {
             let id = getUserId() // cookie 中得id
             let result = await reqChartsData(id)
-            if(result.code == 200) {
+            if (result.code == 200) {
                 let dept = result.data.dept
                 let status = result.data.state
 
                 let pCD = []
-                for(key in dept) {
+                for (key in dept) {
                     pCD.push({
                         name: key,
                         value: dept.key
@@ -79,82 +79,86 @@ export default {
 
                 let bCL = []
                 let bCD = []
-                for(key in status) {
+                for (key in status) {
                     bCL.push(key)
                     bCD.push(status.key)
                 }
                 this.barChartLabel = bCL
                 this.barChartData = bCD // 条形图数据
+
+                this.initCharts()
             }
+            else this.initCharts() // 在没有网络的情况下展示一些死数据
+        },
+        initCharts() {
+            let peiChart = echarts.init(this.$refs.chart)
+            peiChart.setOption({
+                title: {
+                    text: this.peiChartData[0].name,
+                    subtext: this.peiChartData[0].value,
+                    left: 'center',
+                    top: 'center',
+                },
+                tooltip: {
+                    trigger: 'item'
+                },
+                series: [
+                    {
+                        name: 'Access From',
+                        type: 'pie',
+                        radius: ['40%', '70%'],
+                        avoidLabelOverlap: false,
+                        itemStyle: {
+                            borderRadius: 10,
+                            borderColor: '#fff',
+                            borderWidth: 2
+                        },
+                        label: {
+                            show: true,
+                            position: 'outside',
+                        },
+                        labelLine: {
+                            show: true
+                        },
+                        data: this.peiChartData
+                    }
+                ]
+            })
+            // 绑定事件
+            peiChart.on("mouseover", (param) => {
+                const { value, name } = param.data
+                peiChart.setOption({
+                    title: {
+                        text: name,
+                        subtext: value,
+                    }
+                })
+            })
+
+            let barChart = echarts.init(this.$refs.chart1)
+            barChart.setOption({
+                xAxis: {
+                    type: 'category',
+                    data: this.barChartLabel
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: [
+                    {
+                        data: this.barChartData,
+                        type: 'bar',
+                        showBackground: true,
+                        backgroundStyle: {
+                            color: 'rgba(180, 180, 180, 0.2)'
+                        }
+                    }
+                ]
+            })
         }
     },
     mounted() {
-        this.getChartData()
-
-        let peiChart = echarts.init(this.$refs.chart)
-        peiChart.setOption({
-            title: {
-                text: '项目部',
-                subtext: '6',
-                left: 'center',
-                top: 'center',
-            },
-            tooltip: {
-                trigger: 'item'
-            },
-            series: [
-                {
-                    name: 'Access From',
-                    type: 'pie',
-                    radius: ['40%', '70%'],
-                    avoidLabelOverlap: false,
-                    itemStyle: {
-                        borderRadius: 10,
-                        borderColor: '#fff',
-                        borderWidth: 2
-                    },
-                    label: {
-                        show: true,
-                        position: 'outside',
-                    },
-                    labelLine: {
-                        show: true
-                    },
-                    data: this.peiChartData
-                }
-            ]
-        })
-        // 绑定事件
-        peiChart.on("mouseover", (param) => {
-            const { value, name } = param.data
-            peiChart.setOption({
-                title: {
-                    text: name,
-                    subtext: value,
-                }
-            })
-        })
-
-        let barChart = echarts.init(this.$refs.chart1)
-        barChart.setOption({
-            xAxis: {
-                type: 'category',
-                data: this.barChartLabel
-            },
-            yAxis: {
-                type: 'value'
-            },
-            series: [
-                {
-                    data: this.barChartData,
-                    type: 'bar',
-                    showBackground: true,
-                    backgroundStyle: {
-                        color: 'rgba(180, 180, 180, 0.2)'
-                    }
-                }
-            ]
-        })
+        this.getChartData() // 取得数据后调了初始化图表的函数
     },
 }
 </script>
