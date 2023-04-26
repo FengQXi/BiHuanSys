@@ -36,3 +36,13 @@ export function logout(data) {
     data,
   })
 }
+
+export function reqChartsData(id) {
+    return request({
+        url: '/system/problem/board',
+        method: 'get',
+        params: {
+            userId: id
+        }
+    })
+}
